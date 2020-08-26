@@ -2,7 +2,7 @@
 # coding=utf-8
 import numpy as np
 import torch
-from torchvision.models.resnet import models_url, load_state_dict_from_url, ResNet, Bottleneck
+from torchvision.models.resnet import model_urls, load_state_dict_from_url, ResNet, Bottleneck
 from torchvision import transforms
 from PIL import Image
 import os
