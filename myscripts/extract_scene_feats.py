@@ -51,16 +51,17 @@ def get_resnext101_32x8d(pretrained=False, progress=True, **kwargs):
     kwargs['width_per_group'] = 8
     return _resnet('resnext101_32x8d', Bottleneck, [3, 4, 23, 3], pretrained, progress, **kwargs)
 
-def extract_features(args, model):
+def extract_features(args, model, device):
     image_path = args.image_path
     output_path = args.output_path
 
+    model.to(device)
     model.eval()
     with torch.no_grad():
         images_path_list = glob.glob(os.path.join(image_path, '*.jpg'))
         for item in images_path_list:
             img = Image.open(item)
-            img = trans(img).unsqueeze(0)
+            img = trans(img).unsqueeze(0).to(device)
             feat = model(img)
             feat = feat.squeeze()
 
@@ -70,9 +71,11 @@ def extract_features(args, model):
 
 if __name__ == '__main__':
     import argparse
-    parser = argparse.add_argument('--image_path', type=str, default='/disks/lilaoshi666/hanhua.ye/MSDN/MSRVTT_image')
-    parser = argparse.add_argument('--output_path', type=str, default='/disks/lilaoshi666/hanhua.ye/detail-captioning/data/scene_features')
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--image_path', type=str, default='/disks/lilaoshi666/hanhua.ye/MSDN/MSRVTT_image')
+    parser.add_argument('--output_path', type=str, default='/disks/lilaoshi666/hanhua.ye/detail-captioning/data/scene_features')
     args = parser.parse_args()
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     resnext101_32x8d = get_resnext101_32x8d(pretrained=True)
-    extract_features(args, resnext101_32x8d)
+    extract_features(args, resnext101_32x8d, device)
