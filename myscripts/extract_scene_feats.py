@@ -63,7 +63,7 @@ def extract_features(args, model, device):
             img = Image.open(item)
             img = trans(img).unsqueeze(0).to(device)
             feat = model(img)
-            feat = feat.squeeze()
+            feat = feat.squeeze().cpu().numpy()
 
             img_name = item.split('/')[-1].split('.')[0]
             save_path = os.path.join(output_path, img_name + '.npy')
