@@ -54,10 +54,11 @@ def extract_features(args, model, device):
     image_path = args.image_path
     output_path = args.output_path
 
-    model.to(device)
     model.eval()
+    model.to(device)
+    # with torch.no_grad():
+    images_path_list = glob.glob(os.path.join(image_path, '*.jpg'))
     with torch.no_grad():
-        images_path_list = glob.glob(os.path.join(image_path, '*.jpg'))
         for item in images_path_list:
             img = Image.open(item)
             img = trans(img).unsqueeze(0).to(device)
@@ -75,6 +76,8 @@ if __name__ == '__main__':
     parser.add_argument('--output_path', type=str, default='/disks/lilaoshi666/hanhua.ye/detail-captioning/data/scene_features')
     args = parser.parse_args()
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    print('device is ', device)
 
     resnext101_32x8d = get_resnext101_32x8d(pretrained=True)
     extract_features(args, resnext101_32x8d, device)
+    print('=======================finish==========================')
