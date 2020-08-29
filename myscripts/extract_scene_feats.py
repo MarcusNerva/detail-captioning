@@ -11,8 +11,7 @@ import glob
 mean, std = [0.485, 0.456, 0.406], [0.229, 0.224, 0.225]
 normalize = transforms.Normalize(mean=mean, std=std)
 trans = transforms.Compose([
-    transforms.Resize(224),
-    transforms.CenterCrop(224),
+    transforms.Resize([224, 224]),
     transforms.ToTensor(),
     normalize
 ])
@@ -42,7 +41,7 @@ class MyResNet(ResNet):
 def _resnet(arch, block, layers, pretrained, progress, **kwargs):
     model = MyResNet(block, layers, **kwargs)
     if pretrained:
-        state_dict = load_state_dict_from_url(models_url[arch], progress=progress)
+        state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
