@@ -106,8 +106,8 @@ def rearrange(args, vid):
 
     features = np.load(feat_path)
     features_new = np.zeros(features.shape)
-    relation = np.zeros(features.shape[0], len(_store), features.shape[-1])
-    objects = np.zeros(features.shape[0], len(_store), 2 * features.shape[-1])
+    relation = np.zeros((features.shape[0], len(_store), features.shape[-1]))
+    objects = np.zeros((features.shape[0], len(_store), 2 * features.shape[-1]))
     boxes = np.load(box_path)
     boxes = boxes[..., 1:]
     boxes_new = np.zeros(boxes.shape)
