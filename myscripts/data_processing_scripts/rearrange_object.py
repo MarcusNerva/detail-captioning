@@ -61,7 +61,7 @@ def get_similar_mat(cosine, iou, lambda_value):
     similar_value is calculate by Weighted addition between cosine value and iou value.
     """
     similar_matrix = lambda_value * cosine + (1.0 - lambda_value) * iou
-    similar_matrix = softmax(cosine_similar)
+    similar_matrix = softmax(similar_matrix)
     return similar_matrix
 
 
@@ -117,7 +117,7 @@ def rearrange(args, vid):
     n_obj = boxes.shape[1]
     features_new[0, ...] = features[0, ...]
     relation[0, ...] = features_new[0, _relation_id, ...]
-    objects[0, ...] = torch.stack([features_new[0, pair, ...].reshape(-1) for pair in _store], axis=0)
+    objects[0, ...] = np.stack([features_new[0, pair, ...].reshape(-1) for pair in _store], axis=0)
     boxes_new[0, ...] = boxes[0, ...]
 
     for i in range(1, length):
@@ -145,9 +145,9 @@ def rearrange(args, vid):
                 features_new[i, n_obj + _mat_mapping[j, k], ...] = features[i, n_obj + _mat_mapping[map_j, map_k], ...]
         
         relation[i, ...] = features_new[i, _relation_id, ...]
-        objects[i, ...] = torch.stack([features_new[i, pair, ...].reshape(-1) for pair in _store], axis=0)
+        objects[i, ...] = np.stack([features_new[i, pair, ...].reshape(-1) for pair in _store], axis=0)
         
-
+    assert relation.shape == (20, 10, 1024) and objects.shape == (20, 10, 2048), 'rearrange failed!'
     print('done rearrange, relation.shape == {rela} objects.shape == {obj}'.format(rela=relation.shape, obj=objects.shape))
     # np.save(rearranged_feat_path, features_new)
     np.save(relation_feat_path, relation)

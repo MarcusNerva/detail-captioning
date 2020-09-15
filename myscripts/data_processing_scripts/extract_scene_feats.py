@@ -7,6 +7,9 @@ from torchvision import transforms
 from PIL import Image
 import os
 import glob
+import sys
+sys.path.append('../../')
+from mycfgs.cfgs import get_total_settings
 
 mean, std = [0.485, 0.456, 0.406], [0.229, 0.224, 0.225]
 normalize = transforms.Normalize(mean=mean, std=std)
@@ -51,13 +54,13 @@ def get_resnext101_32x8d(pretrained=False, progress=True, **kwargs):
     return _resnet('resnext101_32x8d', Bottleneck, [3, 4, 23, 3], pretrained, progress, **kwargs)
 
 def extract_features(args, model, device):
-    image_path = args.image_path
-    output_path = args.output_path
+    image_dir = args.videos_dir
+    output_dir = args.res2d_dir
 
     model.eval()
     model.to(device)
     # with torch.no_grad():
-    images_path_list = glob.glob(os.path.join(image_path, '*.jpg'))
+    images_path_list = glob.glob(os.path.join(image_dir, '*.jpg'))
     with torch.no_grad():
         for item in images_path_list:
             img = Image.open(item)
@@ -66,15 +69,11 @@ def extract_features(args, model, device):
             feat = feat.squeeze().cpu().numpy()
 
             img_name = item.split('/')[-1].split('.')[0]
-            save_path = os.path.join(output_path, img_name + '.npy')
+            save_path = os.path.join(output_dir, img_name + '.npy')
             np.save(save_path, feat)
 
 if __name__ == '__main__':
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--image_path', type=str, default='/disks/lilaoshi666/hanhua.ye/MSDN/MSRVTT_image')
-    parser.add_argument('--output_path', type=str, default='/disks/lilaoshi666/hanhua.ye/detail-captioning/data/scene_features')
-    args = parser.parse_args()
+    args = get_total_settings()
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print('device is ', device)
 
