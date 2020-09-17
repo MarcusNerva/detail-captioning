@@ -16,22 +16,22 @@ def get_total_settings():
     """
     =====================Data & Model Path Settings=====================
     """
-    parser.add_argument('--data_dir', type=str, default='/disks/lilaoshi666/hanhua.ye/detail-captioning/mydata')
-    parser.add_argument('--videos_dir', type=str, default='/disks/lilaoshi666/hanhua.ye/detail-captioning/mydata/videos')
-    parser.add_argument('--frames_dir', type=str, default='/disks/lilaoshi666/hanhua.ye/detail-captioning/mydata/picked_frames')
+    parser.add_argument('--data_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata')
+    parser.add_argument('--videos_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/videos')
+    parser.add_argument('--frames_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/picked_frames')
 
-    parser.add_argument('--res2d_dir', type=str, default='/disks/lilaoshi666/hanhua.ye/detail-captioning/mydata/res2d_features')
-    parser.add_argument('--i3d_dir', type=str, default='/disks/lilaoshi666/hanhua.ye/detail-captioning/mydata/i3d_features')
-    parser.add_argument('--relation_dir', type=str, default='/disks/lilaoshi666/hanhua.ye/detail-captioning/mydata/relation_features')
-    parser.add_argument('--object_dir', type=str, default='/disks/lilaoshi666/hanhua.ye/detail-captioning/mydata/object_features')
-    parser.add_argument('--res2d_mask_path', type=str, default='/disks/lilaoshi666/hanhua.ye/detail-captioning/mydata/res2d_mask.npy')
-    parser.add_argument('--i3d_mask_path', type=str, default='/disks/lilaoshi666/hanhua.ye/detail-captioning/mydata/i3d_mask.npy')
-    parser.add_argument('--seq_mask_path', type=str, default='/disks/lilaoshi666/hanhua.ye/detail-captioning/mydata/seq_mask.npy')
-    parser.add_argument('--json_path', type=str, default='/disks/lilaoshi666/hanhua.ye/detail-captioning/mydata/videodatainfo_2017.json')
-    parser.add_argument('--torchtext_path', type=str, default='/disks/lilaoshi666/hanhua.ye/detail-captioning/mydata/torchtext.pkl')
-    parser.add_argument('--seq_dict_path', type=str, default='/disks/lilaoshi666/hanhua.ye/detail-captioning/mydata/seq_dict.pkl')
-    parser.add_argument('--numberic_dict_path', type=str, default='/disks/lilaoshi666/hanhua.ye/detail-captioning/mydata/numberic_dict.npy')
-    parser.add_argument('--checkpoints_dir', type=str, default='/disks/lilaoshi666/hanhua.ye/detail-captioning/checkpoints')
+    parser.add_argument('--res2d_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/res2d_features')
+    parser.add_argument('--i3d_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/i3d_features')
+    parser.add_argument('--relation_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/relation_features')
+    parser.add_argument('--object_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/object_features')
+    parser.add_argument('--res2d_mask_path', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/res2d_mask.npy')
+    parser.add_argument('--i3d_mask_path', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/i3d_mask.npy')
+    parser.add_argument('--seq_mask_path', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/seq_mask.npy')
+    parser.add_argument('--json_path', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/videodatainfo_2017.json')
+    parser.add_argument('--torchtext_path', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/torchtext.pkl')
+    parser.add_argument('--seq_dict_path', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/seq_dict.pkl')
+    parser.add_argument('--numberic_dict_path', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/mydata/numberic_dict.npy')
+    parser.add_argument('--checkpoints_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/checkpoints')
 
 
     """
