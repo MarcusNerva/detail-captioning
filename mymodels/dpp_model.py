@@ -42,6 +42,7 @@ class DPPModel:
             model.eval()
             model.to(self.device)
             image_path_list = glob.glob(os.path.join(self.feature_dir, '*.jpg'))
+            image_path_list = sorted(image_path_list)
             feats_store = []
             
             with torch.no_grad():
