@@ -52,6 +52,10 @@ if __name__ == '__main__':
     args = get_total_settings()
     dst = os.path.join(args.frames_dir, 'cache')
     videos_dir = args.videos_dir    
+    frames_dir = args.frames_dir
+    if os.path.exists(frames_dir):
+        shutil.rmtree(frames_dir)
+    os.makedirs(frames_dir)
 
     settings = vars(args)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -74,7 +78,7 @@ if __name__ == '__main__':
         for idx in Yg:
             jpg_path = frames_list[idx]
             jpg_name = jpg_path.split('/')[-1]
-            new_jpg_path = os.path.join(args.frames_dir, '%06d' % i + '_' + jpg_name)
+            new_jpg_path = os.path.join(frames_dir, '%06d' % i + '_' + jpg_name)
             print(jpg_path)
             print(new_jpg_path)
             shutil.copyfile(jpg_path, new_jpg_path)

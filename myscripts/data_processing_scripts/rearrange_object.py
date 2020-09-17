@@ -159,11 +159,11 @@ if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
     
-    parser.add_argument('--msdn_features', type=str, default='/disks/lilaoshi666/hanhua.ye/MSDN/MSRVTT_features/features')
-    parser.add_argument('--relation_features', type=str, default='/disks/lilaoshi666/hanhua.ye/detail-captioning/mydata/relation_features')
-    parser.add_argument('--object_features', type=str, default='/disks/lilaoshi666/hanhua.ye/detail-captioning/mydata/object_features')
-    parser.add_argument('--box_boundings', type=str, default='/disks/lilaoshi666/hanhua.ye/MSDN/MSRVTT_boxes/boxes')
-    parser.add_argument('--rearranged_box_boundings', type=str, default='/disks/lilaoshi666/hanhua.ye/MSDN/MSRVTT_boxes/rearranged_boxes')
+    parser.add_argument('--msdn_features', type=str, default='/home/hanhuaye/PythonProject/opensource/MSDN/MSRVTT_features/features')
+    parser.add_argument('--relation_features', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/relation_features')
+    parser.add_argument('--object_features', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/object_features')
+    parser.add_argument('--box_boundings', type=str, default='/home/hanhuaye/PythonProject/opensource/MSDN/MSRVTT_boxes/boxes')
+    parser.add_argument('--rearranged_box_boundings', type=str, default='/home/hanhuaye/PythonProject/opensource/MSDN/MSRVTT_boxes/rearranged_boxes')
     parser.add_argument('--lambda_value', type=float, default=0.5)
     parser.add_argument('--range', type=int, default=10000)
     parser.add_argument('--n_obj', type=int, default=5)
