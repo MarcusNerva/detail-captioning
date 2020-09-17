@@ -9,6 +9,7 @@ import os
 import glob
 import sys
 sys.path.append('../../')
+sys.path.append('../../../')
 from mycfgs.cfgs import get_total_settings
 
 mean, std = [0.485, 0.456, 0.406], [0.229, 0.224, 0.225]

@@ -9,6 +9,7 @@ import torch.nn as nn
 from torchvision.models.mobilenet import model_urls, MobileNetV2, load_state_dict_from_url
 import sys
 sys.path.append('../../')
+sys.path.append('../../../')
 from mymodels import DPPModel
 from mycfgs.cfgs import get_total_settings
 
