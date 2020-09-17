@@ -1,20 +1,19 @@
 #!/bin/bash
 
-# >>> conda init >>>
+# >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$(CONDA_REPORT_ERRORS=false '/home/hanhua.ye/anaconda3/bin/conda' shell.bash hook 2> /dev/null)"
+__conda_setup="$('/home/hanhuaye/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
-    \eval "$__conda_setup"
+    eval "$__conda_setup"
 else
-    if [ -f "/home/hanhua.ye/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/hanhua.ye/anaconda3/etc/profile.d/conda.sh"
-        CONDA_CHANGEPS1=false conda activate base
+    if [ -f "/home/hanhuaye/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/hanhuaye/anaconda3/etc/profile.d/conda.sh"
     else
-        \export PATH="/home/hanhua.ye/anaconda3/bin:$PATH"
+        export PATH="/home/hanhuaye/anaconda3/bin:$PATH"
     fi
 fi
 unset __conda_setup
-# <<< conda init <<<
+# <<< conda initialize <<<
 
 conda activate py37
 
@@ -27,7 +26,7 @@ exit 1
 echo "===============extracting scene feats is finished!==============="
 
 
-conda activate python27
+conda activate py27
 CUDA_VISIBLE_DEVICES=0 /disks/lilaoshi666/hanhua.ye/MSDN/eval.sh 
 exit 1
 echo "===============extracting MSDN feats is finished==============="
