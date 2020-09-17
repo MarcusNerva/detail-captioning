@@ -68,6 +68,7 @@ if __name__ == '__main__':
 
     for i, (video_path) in enumerate(video_list):
         extract_frames(video_path, dst)
+        dst = sorted(dst)
         frames_list = glob.glob(os.path.join(dst, '*.jpg'))
         dpp = DPPModel(mode, dst, settings, device, _mobilenet)
         Yg = dpp.dpp()
