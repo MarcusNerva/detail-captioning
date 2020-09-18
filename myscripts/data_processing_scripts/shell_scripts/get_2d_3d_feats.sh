@@ -20,8 +20,8 @@ conda activate py37
 # CUDA_VISIBLE_DEVICES=0 python /home/hanhuaye/PythonProject/detail-captioning/myscripts/data_processing_scripts/extract_frames.py > log/extract_frames.log || exit 1
 # echo "===============extracting frames is finished!==============="
 
-python /home/hanhuaye/PythonProject/detail-captioning/myscripts/data_processing_scripts/extract_scene_feats.py || exit 1
-echo "===============extracting scene feats is finished!==============="
+# python /home/hanhuaye/PythonProject/detail-captioning/myscripts/data_processing_scripts/extract_scene_feats.py || exit 1
+# echo "===============extracting scene feats is finished!==============="
 
 conda activate py27
 python /home/hanhuaye/PythonProject/opensource/MSDN/train_hdn.py \
