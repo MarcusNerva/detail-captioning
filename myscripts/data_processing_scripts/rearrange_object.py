@@ -97,6 +97,11 @@ def rearrange(args, vid):
     rearranged_box_boundings = args.rearranged_box_boundings
     lambda_value = args.lambda_value
 
+    if not os.path.exists(relation_features):
+        os.makedirs(relation_features)
+    if not os.path.exists(object_features):
+        os.makedirs(object_features)
+
     video_id = '%06d' % vid
     feat_path = os.path.join(msdn_features, video_id + '.npy')
     relation_feat_path = os.path.join(relation_features, video_id + '.npy')
