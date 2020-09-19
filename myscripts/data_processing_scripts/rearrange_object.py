@@ -106,7 +106,7 @@ def rearrange(args, vid):
     feat_path = os.path.join(msdn_features, video_id + '.npy')
     relation_feat_path = os.path.join(relation_features, 'video' + str(vid) + '.npy')
     object_feat_path = os.path.join(object_features, 'video' + str(vid) + '.npy')
-    box_path = os.path.join(box_boundings, video_id + '.npy')
+    box_path = os.path.join(box_boundings, 'video' + str(vid) + '.npy')
     # rearranged_box_path = os.path.join(rearranged_box_boundings, video_id + '.npy')
 
     features = np.load(feat_path)
