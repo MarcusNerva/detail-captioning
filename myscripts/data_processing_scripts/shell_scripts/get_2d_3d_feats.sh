@@ -1,4 +1,3 @@
-#!/bin/bash
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -23,14 +22,14 @@ conda activate py37
 # python /home/hanhuaye/PythonProject/detail-captioning/myscripts/data_processing_scripts/extract_scene_feats.py || exit 1
 # echo "===============extracting scene feats is finished!==============="
 
-conda activate py27
-python /home/hanhuaye/PythonProject/opensource/MSDN/train_hdn.py \
-    --resume_training --disable_language_model --rnn_type LSTM_normal \
-    --dataset_option=normal  --MPS_iter=1 \
-    --evaluate \
-    || exit 1
+# conda activate py27
+# python /home/hanhuaye/PythonProject/opensource/MSDN/train_hdn.py \
+    # --resume_training --disable_language_model --rnn_type LSTM_normal \
+    # --dataset_option=normal  --MPS_iter=1 \
+    # --evaluate \
+    # || exit 1
 
-echo "===============extracting MSDN feats is finished==============="
+# echo "===============extracting MSDN feats is finished==============="
 
 conda activate py37
 
