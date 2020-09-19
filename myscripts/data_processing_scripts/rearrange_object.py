@@ -116,6 +116,7 @@ def rearrange(args, vid):
     boxes = np.load(box_path)
     boxes = boxes[..., 1:]
     boxes_new = np.zeros(boxes.shape)
+    print(boxes_new.shape)
     assert boxes_new.shape == (20, 5, 4), '========box size is wrong!========'
 
     length = boxes.shape[0]
