@@ -20,7 +20,8 @@ def get_total_settings():
     parser.add_argument('--videos_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/videos')
     parser.add_argument('--frames_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/picked_frames')
 
-    parser.add_argument('--res2d_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/res2d_features')
+    parser.add_argument('--raw_res2d_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/res2d_features')
+    parser.add_argument('--res2d_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/res2d_features/features')
     parser.add_argument('--i3d_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/i3d_features')
     parser.add_argument('--relation_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/relation_features')
     parser.add_argument('--object_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/object_features')

@@ -14,7 +14,7 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-conda activate py37
+# conda activate py37
 
 # CUDA_VISIBLE_DEVICES=0 python /home/hanhuaye/PythonProject/detail-captioning/myscripts/data_processing_scripts/extract_frames.py > log/extract_frames.log || exit 1
 # echo "===============extracting frames is finished!==============="
@@ -42,5 +42,5 @@ echo "===============merging boxes is finished==============="
 python /home/hanhuaye/PythonProject/detail-captioning/myscripts/data_processing_scripts/rearrange_object.py || exit 1
 echo "===============rearranging objects & relation feats is finished==============="
 
-python /home/hanhuaye/PythonProject/detail-captioning/myscripts/data_processing_scripts/pick_up_i3d_feats.py || exit 1
-echo "===============picking up i3d feats is finished==============="
+# python /home/hanhuaye/PythonProject/detail-captioning/myscripts/data_processing_scripts/pick_up_i3d_feats.py || exit 1
+# echo "===============picking up i3d feats is finished==============="

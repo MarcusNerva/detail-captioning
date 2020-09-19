@@ -104,8 +104,8 @@ def rearrange(args, vid):
 
     video_id = '%06d' % vid
     feat_path = os.path.join(msdn_features, video_id + '.npy')
-    relation_feat_path = os.path.join(relation_features, video_id + '.npy')
-    object_feat_path = os.path.join(object_features, video_id + '.npy')
+    relation_feat_path = os.path.join(relation_features, 'video' + str(vid) + '.npy')
+    object_feat_path = os.path.join(object_features, 'video' + str(vid) + '.npy')
     box_path = os.path.join(box_boundings, video_id + '.npy')
     # rearranged_box_path = os.path.join(rearranged_box_boundings, video_id + '.npy')
 
@@ -116,7 +116,7 @@ def rearrange(args, vid):
     boxes = np.load(box_path)
     boxes = boxes[..., 1:]
     boxes_new = np.zeros(boxes.shape)
-    # assert boxes_new.shape == (20, 5, 4), '========box size is wrong!========'
+    assert boxes_new.shape == (20, 5, 4), '========box size is wrong!========'
 
     length = boxes.shape[0]
     n_obj = boxes.shape[1]
@@ -152,7 +152,7 @@ def rearrange(args, vid):
         relation[i, ...] = features_new[i, _relation_id, ...]
         objects[i, ...] = np.stack([features_new[i, pair, ...].reshape(-1) for pair in _store], axis=0)
         
-    # assert relation.shape == (20, 10, 1024) and objects.shape == (20, 10, 2048), 'rearrange failed!'
+    assert relation.shape == (20, 10, 1024) and objects.shape == (20, 10, 2048), 'rearrange failed!'
     print('done rearrange, relation.shape == {rela} objects.shape == {obj}'.format(rela=relation.shape, obj=objects.shape))
     # np.save(rearranged_feat_path, features_new)
     np.save(relation_feat_path, relation)
