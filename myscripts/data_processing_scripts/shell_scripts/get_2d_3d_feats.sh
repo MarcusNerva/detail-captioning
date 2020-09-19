@@ -33,11 +33,11 @@ unset __conda_setup
 
 conda activate py37
 
-# python /home/hanhuaye/PythonProject/opensource/MSDN/merge_features.py || exit 1
-# echo "===============merging feats is finished==============="
+python /home/hanhuaye/PythonProject/opensource/MSDN/merge_features.py || exit 1
+echo "===============merging feats is finished==============="
 
-# python /home/hanhuaye/PythonProject/opensource/MSDN/merge_boxes.py || exit 1
-# echo "===============merging boxes is finished==============="
+python /home/hanhuaye/PythonProject/opensource/MSDN/merge_boxes.py || exit 1
+echo "===============merging boxes is finished==============="
 
 python /home/hanhuaye/PythonProject/detail-captioning/myscripts/data_processing_scripts/rearrange_object.py || exit 1
 echo "===============rearranging objects & relation feats is finished==============="
