@@ -27,11 +27,11 @@ def get_total_settings():
     parser.add_argument('--object_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/object_features')
     parser.add_argument('--res2d_mask_path', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/res2d_mask.npy')
     parser.add_argument('--i3d_mask_path', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/i3d_mask.npy')
-    parser.add_argument('--seq_mask_path', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/seq_mask.npy')
+    parser.add_argument('--seq_mask_path', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/seq_mask.pkl')
     parser.add_argument('--json_path', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/videodatainfo_2017.json')
     parser.add_argument('--torchtext_path', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/torchtext.pkl')
     parser.add_argument('--seq_dict_path', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/seq_dict.pkl')
-    parser.add_argument('--numberic_dict_path', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/numberic_dict.npy')
+    parser.add_argument('--numberic_dict_path', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/numberic_dict.pkl')
     parser.add_argument('--checkpoints_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/checkpoints')
 
 
