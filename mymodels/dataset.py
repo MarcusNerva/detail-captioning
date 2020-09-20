@@ -61,7 +61,7 @@ def get_vocab_and_seq(args):
         assert len(sentence_list) == 20, 'something goes wrong with seq_dict in dataset.py'
         discrete_sent_list = list(map(text_proc.preprocess, sentence_list))
         temp_list = []
-        for i, [single_list] in enumerate(discrete_sent_list):
+        for i, (single_list) in enumerate(discrete_sent_list):
             temp_seq_mask[i, :len(single_list) + 1] = 1
             single_sent = ''
             for word in single_list:
