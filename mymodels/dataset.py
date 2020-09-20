@@ -28,8 +28,8 @@ def get_vocab_and_seq(args):
     json_path = args.json_path
     torchtext_path = os.path.join(data_dir, 'torchtext.pkl')
     seq_dict_path = os.path.join(data_dir, 'seq_dict.pkl')
-    seq_mask_path = os.path.join(data_dir, 'seq_mask.npy')
-    numberic_dict_path = os.path.join(data_dir, 'numberic_dict.npy')
+    seq_mask_path = os.path.join(data_dir, 'seq_mask.pkl')
+    numberic_dict_path = os.path.join(data_dir, 'numberic_dict.pkl')
 
     text_proc = torchtext.data.Field(sequential=True, init_token=bos, eos_token=eos, pad_token=eos, 
                                     tokenize='spacy', lower=True, batch_first=True, fix_length=max_length)
@@ -80,8 +80,11 @@ def get_vocab_and_seq(args):
         pickle.dump(text_proc, f)
     with open(seq_dict_path, 'wb') as f:
         pickle.dump(seq_dict, f)
-    np.save(numberic_dict_path, numberic_dict)
-    np.save(seq_mask_path, seq_mask)
+    with open(numberic_dict_path, 'wb') as f:
+        pickle.dump(numberic_dict, f)
+    with open(seq_mask_path, 'wb') as f:
+        pickle.dump(seq_mask, f)
+
 
 class DatasetMSRVTT(Dataset):
     """
@@ -142,10 +145,12 @@ class DatasetMSRVTT(Dataset):
             text_proc = pickle.load(f)
         with open(seq_dict_path, 'rb') as f:
             self.seq_dict = pickle.load(f)
-        self.numberic_dict = np.load(numberic_dict_path)
+        with open(numberic_dict_path, 'rb') as f:
+            self.numberic_dict = pickle.load(f)
+        with open(seq_mask_path, 'rb') as f:
+            self.seq_mask = pickle.load(f)
         self.res2d_mask = np.load(res2d_mask_path)
         self.i3d_mask = np.load(i3d_mask_path)
-        self.seq_mask = np.load(seq_mask_path)
 
 
         for video_id in self.data_range:
@@ -164,6 +169,7 @@ class DatasetMSRVTT(Dataset):
             self.i3d.append(i3d)
             self.relation.append(relation)
             self.object.append(object_)
+            
             for number_tensor in self.numberic_dict[video_id]:
                 self.numberic.append(number_tensor)
                 self.video_id.append(vid)
@@ -190,8 +196,8 @@ class DatasetMSRVTT(Dataset):
                 self.i3d[vid], \
                 self.relation[vid], \
                 self.object[vid], \
-                self.res2d_mask[str_vid], \
-                self.i3d_mask[str_vid], \
+                self.res2d_mask[vid], \
+                self.i3d_mask[vid], \
                 self.numberic[idx], \
                 self.mask[idx], \
                 self.seq_dict[str_vid]
