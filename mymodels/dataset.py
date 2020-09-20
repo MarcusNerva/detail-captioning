@@ -19,17 +19,17 @@ def get_vocab_and_seq(args):
         seq_dict: {video_id -> [caption * 20]}
     """
 
-    data_path = args.data_path
+    data_dir = args.data_dir
     bos = args.bos
     eos = args.eos
     pad = args.pad
     max_length = args.seq_length
     
     json_path = args.json_path
-    torchtext_path = os.path.join(data_path, 'torchtext.pkl')
-    seq_dict_path = os.path.join(data_path, 'seq_dict.pkl')
-    seq_mask_path = os.path.join(data_path, 'seq_mask.npy')
-    numberic_dict_path = os.path.join(data_path, 'numberic_dict.npy')
+    torchtext_path = os.path.join(data_dir, 'torchtext.pkl')
+    seq_dict_path = os.path.join(data_dir, 'seq_dict.pkl')
+    seq_mask_path = os.path.join(data_dir, 'seq_mask.npy')
+    numberic_dict_path = os.path.join(data_dir, 'numberic_dict.npy')
 
     text_proc = torchtext.data.Field(sequential=True, init_token=bos, eos_token=eos, pad_token=eos, 
                                     tokenize='spacy', lower=True, batch_first=True, fix_length=max_length)
