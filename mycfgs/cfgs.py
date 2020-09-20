@@ -31,7 +31,7 @@ def get_total_settings():
     parser.add_argument('--json_path', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/videodatainfo_2017.json')
     parser.add_argument('--torchtext_path', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/torchtext.pkl')
     parser.add_argument('--seq_dict_path', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/seq_dict.pkl')
-    parser.add_argument('--numberic_dict_path', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/mydata/numberic_dict.npy')
+    parser.add_argument('--numberic_dict_path', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/numberic_dict.npy')
     parser.add_argument('--checkpoints_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/checkpoints')
 
 
