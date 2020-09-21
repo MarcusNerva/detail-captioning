@@ -17,4 +17,4 @@ unset __conda_setup
 
 conda activate py37
 
-nohup python /home/hanhuaye/PythonProject/detail-captioning/myscripts/shell_scripts/train.py > log/train.log 2>&1 &
+nohup python /home/hanhuaye/PythonProject/detail-captioning/myscripts/train.py > log/train.log 2>&1 &

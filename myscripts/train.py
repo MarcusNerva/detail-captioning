@@ -66,7 +66,7 @@ def train(args):
     self_critical_after = args.self_critical_after
 
     best_model_path = os.path.join(checkpoint_dir, 'best_model.pth')
-    device = torch.device('cuda' if torch.cuda.is_available() 'cpu')
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
