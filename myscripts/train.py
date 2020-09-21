@@ -3,7 +3,7 @@
 import torch
 import torch.optim as optim
 from torch.utils.data import DataLoader
-from torchnet import meteor
+from torchnet import meter
 from collections import OrderedDict
 import os
 import numpy as np
