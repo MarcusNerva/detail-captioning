@@ -2,9 +2,9 @@
 # coding=utf-8
 import torch
 import os
-from ..mymodels import CaptionModel, DatasetMSRVTT
-from ..mycfgs.cfgs import get_total_settings
-from .eval import eval
+from mymodels import CaptionModel, DatasetMSRVTT
+from mycfgs.cfgs import get_total_settings
+from myscripts.eval import eval
 
 
 if __name__ == '__name__':

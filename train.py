@@ -8,12 +8,12 @@ from collections import OrderedDict
 import os
 import numpy as np
 
-from coco_caption.pycocoevalcap.cider.cider import Cider
-from ..mymodels import CaptionModel, DatasetMSRVTT, collate_fn
-from loss import LanguageModelCriterion, RewardCriterion
-from ..mycfgs.cfgs import get_total_settings
-from ..mytools import Visualizer
-from eval import eval, decode_idx
+from myscripts.coco_caption.pycocoevalcap.cider.cider import Cider
+from mymodels import CaptionModel, DatasetMSRVTT, collate_fn
+from myscripts.loss import LanguageModelCriterion, RewardCriterion
+from mycfgs.cfgs import get_total_settings
+from mytools import Visualizer
+from myscripts.eval import eval, decode_idx
 
 def get_self_critical_reward(args, model, res2ds, i3ds, relations, objects, res_mask, i3d_mask, probability_sample, ground_truths):
     batch_size = args.batch_size
