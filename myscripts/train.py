@@ -9,7 +9,7 @@ import os
 import numpy as np
 
 from coco_caption.pycocoevalcap.cider.cider import Cider
-from ..mymodel import CaptionModel, DatasetMSRVTT, collate_fn
+from ..mymodels import CaptionModel, DatasetMSRVTT, collate_fn
 from loss import LanguageModelCriterion, RewardCriterion
 from ..mycfgs.cfgs import get_total_settings
 from ..mytools import Visualizer
