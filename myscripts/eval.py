@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 # coding=utf-8
 from collections import OrderedDict
-from coco_caption.pycocoevalcap.bleu.bleu import Bleu
-from coco_caption.pycocoevalcap.cider.cider import Cider
-from coco_caption.pycocoevalcap.meteor.meteor import Meteor
-from coco_caption.pycocoevalcap.rouge.rouge import rouge
-from ..mymodel.dataset import collate_fn
+from .coco_caption.pycocoevalcap.bleu.bleu import Bleu
+from .coco_caption.pycocoevalcap.cider.cider import Cider
+from .coco_caption.pycocoevalcap.meteor.meteor import Meteor
+from .coco_caption.pycocoevalcap.rouge.rouge import rouge
 from torch.utils.data.dataloader import DataLoader
 
 
@@ -72,7 +71,7 @@ def eval(args, model, dataset, device):
     language_state = language_eval(predictions, gts)
     return language_state
 
-
+"""
 if __name__ == '__main__':
     sample_seqs = ['train traveling down a track in front of a road']
     groundtruth_seqs = [['A train traveling down tracks next to lights',
@@ -82,3 +81,4 @@ if __name__ == '__main__':
                        'A train coming down the tracks arriving at a station']]
 
     language_eval(sample_seqs, groundtruth_seqs)
+"""
