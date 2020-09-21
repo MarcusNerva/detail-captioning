@@ -71,8 +71,8 @@ def train(args):
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
 
-    dataset = DatasetMSRVTT(mode='train', args)
-    valid_dataset = DatasetMSRVTT(mode='valid', args)
+    dataset = DatasetMSRVTT(mode='train', args=args)
+    valid_dataset = DatasetMSRVTT(mode='valid', args=args)
     args.pad_idx = dataset.get_pad_idx()
     args.bos_idx = dataset.get_bos_idx()
     args.eos_idx = dataset.get_eos_idx()
