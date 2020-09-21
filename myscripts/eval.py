@@ -6,7 +6,7 @@ from .coco_caption.pycocoevalcap.cider.cider import Cider
 from .coco_caption.pycocoevalcap.meteor.meteor import Meteor
 from .coco_caption.pycocoevalcap.rouge.rouge import Rouge
 from torch.utils.data.dataloader import DataLoader
-
+import torch
 
 def language_eval(sample_seqs, groundtruth_seqs):
     assert len(sample_seqs) == len(groundtruth_seqs), 'length of sampled seqs is different from that of groundtruth seqs!'

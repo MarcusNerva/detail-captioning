@@ -53,7 +53,7 @@ def set_learning_rate(optimizer, lr):
 def train(args):
     batch_size = args.batch_size
     seed = args.seed
-    checkpoint_dir = args.checkpoint_dir
+    checkpoint_dir = args.checkpoints_dir
     grad_clip = args.grad_clip
     learning_rate = args.learning_rate
     learning_rate_decay_start = args.learning_rate_decay_start
@@ -93,6 +93,8 @@ def train(args):
 
     model.to(device)
     model.train()
+
+    print("==================Training Begin==================")
 
     while True:
         if patience_cnt >= patience: break
@@ -157,6 +159,8 @@ def train(args):
                     torch.save(model.state_dict(), best_model_path)
 
         epoch += 1
+    
+    print("==================Training End==================")  
 
 
 if __name__ == '__main__':
