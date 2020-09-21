@@ -4,7 +4,7 @@ from collections import OrderedDict
 from .coco_caption.pycocoevalcap.bleu.bleu import Bleu
 from .coco_caption.pycocoevalcap.cider.cider import Cider
 from .coco_caption.pycocoevalcap.meteor.meteor import Meteor
-from .coco_caption.pycocoevalcap.rouge.rouge import rouge
+from .coco_caption.pycocoevalcap.rouge.rouge import Rouge
 from torch.utils.data.dataloader import DataLoader
 
 
