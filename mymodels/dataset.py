@@ -239,6 +239,16 @@ class DatasetMSRVTT(Dataset):
 def collate_fn(batch):
     res2d, i3d, relation, object_, res2d_mask, i3d_mask, numberic, mask, seq = zip(*batch)
     
+    res2d = np.stack(res2d, axis=0)
+    i3d = np.stack(i3d, axis=0)
+    relation = np.stack(relation, axis=0)
+    object_ = np.stack(object_, axis=0)
+    res2d_mask = np.stack(res2d_mask, axis=0)
+    i3d_mask = np.stack(i3d_mask, axis=0)
+    numberic = np.stack(numberic, axis=0)
+    mask = np.stack(mask, axis=0)
+    seq = [s for s in seq]
+
     res2d = torch.from_numpy(res2d)
     i3d = torch.from_numpy(i3d)
     relation = torch.from_numpy(relation)
@@ -247,15 +257,5 @@ def collate_fn(batch):
     i3d_mask = torch.from_numpy(i3d_mask)
     numberic = torch.from_numpy(numberic)
     mask = torch.from_numpy(mask)
-
-    res2d = torch.stack(res2d, dim=0)
-    i3d = torch.stack(i3d, dim=0)
-    relation = torch.stack(relation, dim=0)
-    object_ = torch.stack(object_, dim=0)
-    res2d_mask = torch.stack(res2d_mask, dim=0)
-    i3d_mask = torch.stack(i3d_mask, dim=0)
-    numberic = torch.stack(numberic, dim=0)
-    mask = torch.stack(mask, dim=0)
-    seq = [s for s in seq]
 
     return res2d, i3d, relation, object_, res2d_mask, i3d_mask, numberic, mask, seq
