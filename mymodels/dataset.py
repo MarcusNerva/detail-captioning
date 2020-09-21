@@ -115,10 +115,10 @@ class DatasetMSRVTT(Dataset):
         self.itos = None
         
         self.data_range = self._define_data_range()
-        self.res2d = []
-        self.i3d = []
-        self.relation = []
-        self.object = []
+        self.res2d = {}
+        self.i3d = {}
+        self.relation = {}
+        self.object = {}
         self.numberic = []
         self.mask = []
         self.total_numberic = []
@@ -165,10 +165,10 @@ class DatasetMSRVTT(Dataset):
             relation = np.load(relation_path)
             object_ = np.load(object_path)
 
-            self.res2d.append(res2d)
-            self.i3d.append(i3d)
-            self.relation.append(relation)
-            self.object.append(object_)
+            self.res2d[vid] = res2d
+            self.i3d[vid] = i3d
+            self.relation[vid] = relation
+            self.object[vid] = object_
             
             for number_tensor in self.numberic_dict[video_id]:
                 self.numberic.append(number_tensor)
