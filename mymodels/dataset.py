@@ -239,6 +239,15 @@ class DatasetMSRVTT(Dataset):
 def collate_fn(batch):
     res2d, i3d, relation, object_, res2d_mask, i3d_mask, numberic, mask, seq = zip(*batch)
     
+    res2d = torch.from_numpy(res2d)
+    i3d = torch.from_numpy(i3d)
+    relation = torch.from_numpy(relation)
+    object_ = torch.from_numpy(object_)
+    res2d_mask = torch.from_numpy(res2d_mask)
+    i3d_mask = torch.from_numpy(i3d_mask)
+    numberic = torch.from_numpy(numberic)
+    mask = torch.from_numpy(mask)
+
     res2d = torch.stack(res2d, dim=0)
     i3d = torch.stack(i3d, dim=0)
     relation = torch.stack(relation, dim=0)
