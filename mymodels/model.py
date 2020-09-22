@@ -39,15 +39,15 @@ class CaptionModel(nn.Module):
         self.logit.weight.data.uniform_(-initrange, initrange)
 
     def init_state(self, res2d, i3d, res_mask, i3d_mask):
-        _res2d = torch.sum(res2d.cpu(), dim=1, dtype=torch.float32)
-        _mask = torch.sum(res_mask.cpu().float(), dim=1, keepdims=True, dtype=torch.float32)
+        _res2d = torch.sum(res2d.cpu(), dim=1)
+        _mask = torch.sum(res_mask.cpu().double(), dim=1, keepdims=True)
         _res2d = _res2d / _mask
 
-        _i3d = torch.sum(i3d.cpu(), dim=1, dtype=torch.float32)
-        _mask = torch.sum(i3d_mask.cpu().float(), dim=1, keepdims=True, dtype=torch.float32)
+        _i3d = torch.sum(i3d.cpu(), dim=1)
+        _mask = torch.sum(i3d_mask.cpu().double(), dim=1, keepdims=True)
         _i3d = _i3d / _mask
         
-        _feats = torch.cat([_res2d, _i3d], dim=-1).unsqueeze(0).to(self.device).float()
+        _feats = torch.cat([_res2d, _i3d], dim=-1).unsqueeze(0).to(self.device).double()
         state_h = self.embed_h(_feats)
         state_c = self.embed_c(_feats)
 
@@ -65,7 +65,7 @@ class CaptionModel(nn.Module):
             xt = self.embed(it)
             xt_mask = word_mask[:, i].unsqueeze(1)
             output, state = self.decoder(res2d, i3d, relation, objects, xt, state, res_mask, i3d_mask, xt_mask)
-            output_word = torch.log_softmax(self.logit(output.float()), dim=1)
+            output_word = torch.log_softmax(self.logit(output), dim=1)
             outputs.append(output_word)
 
         ret_seq = torch.stack(outputs, dim=1)
@@ -114,15 +114,15 @@ class CaptionModel(nn.Module):
         beam_size = args.beam_size
 
         beam_seq = torch.LongTensor(beam_size, self.seq_length).fill_(self.eos_idx)
-        beam_seq_logprobs = torch.FloatTensor(beam_size, self.seq_length).zero_()
+        beam_seq_logprobs = torch.DoubleTensor(beam_size, self.seq_length).zero_()
         beam_logprobs_sum = torch.zeros(beam_size)
         ret = []
 
         it = torch.LongTensor(beam_size).fill_(self.bos_idx).to(self.device)
         xt = self.embed(it).to(self.device)
-        xt_mask = torch.ones([beam_size, 1]).float().to(self.device)
+        xt_mask = torch.ones([beam_size, 1]).double().to(self.device)
         output, state = self.decoder(res2d, i3d, relation, objects, xt, state, res_mask, i3d_mask, xt_mask)
-        logprob = torch.log_softmax(self.logit(output.float()), dim=1)
+        logprob = torch.log_softmax(self.logit(output), dim=1)
 
         for t in range(self.seq_length):
             # suppress UNK tokens in the decoding. So the probs of 'UNK' are extremely low
@@ -148,7 +148,7 @@ class CaptionModel(nn.Module):
             xt = self.embed(it).to(self.device)
             xt_mask = torch.ones([beam_size, 1]).float().to(self.device)
             output, state = self.decoder(res2d, i3d, relation, objects, xt, state, res_mask, i3d_mask, xt_mask)
-            logprob = torch.log_softmax(self.logit(output.float()), dim=1)
+            logprob = torch.log_softmax(self.logit(output), dim=1)
 
         ret = sorted(ret, key=lambda x: -x['sum_logprob'])[:beam_size]
         return ret
@@ -159,7 +159,7 @@ class CaptionModel(nn.Module):
         batch_size = res2d.size(0)
 
         seq = torch.LongTensor(batch_size, self.seq_length).fill_(self.eos_idx)
-        seq_probabilities = torch.FloatTensor(batch_size, self.seq_length)
+        seq_probabilities = torch.DoubleTensor(batch_size, self.seq_length)
         done_beam = [[] for _ in range(batch_size)]
 
         for i in range(batch_size):

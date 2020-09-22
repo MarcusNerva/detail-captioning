@@ -82,7 +82,7 @@ def train(args):
     dataloader = DataLoader(dataset, batch_size, shuffle=True, collate_fn=collate_fn)
     vis = Visualizer(env='train model')
     model = CaptionModel(args)
-    model = model.float()
+    model = model.double()
     optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
     loss_meter = meter.AverageValueMeter()
     crit = LanguageModelCriterion()
