@@ -28,6 +28,7 @@ def get_vocab_and_seq(args):
     bos = args.bos
     eos = args.eos
     pad = args.pad
+    unk = args.unk
     max_length = args.seq_length
     
     json_path = args.json_path
@@ -57,7 +58,7 @@ def get_vocab_and_seq(args):
     temp_dict = text_proc.vocab.stoi
     temp_list = text_proc.vocab.itos
     
-    temp_dict['<unk>'], temp_dict['<eos>'] = 1, 0
+    temp_dict[unk], temp_dict[eos] = 1, 0
     temp_list[0], temp_list[1] = temp_list[1], temp_list[0]
 
     for video_id in seq_dict:
@@ -115,6 +116,7 @@ class DatasetMSRVTT(Dataset):
         self.pad_idx = None
         self.bos_idx = None
         self.eos_idx = None
+        self.unk_idx = None
         self.n_vocab = None
         self.stoi = None
         self.itos = None 
@@ -161,9 +163,11 @@ class DatasetMSRVTT(Dataset):
         pad = args.pad
         bos = args.bos
         eos = args.eos
+        unk = args.unk
         self.pad_idx = text_proc.vocab.stoi[pad]
         self.bos_idx = text_proc.vocab.stoi[bos]
         self.eos_idx = text_proc.vocab.stoi[eos]
+        self.unk_idx = text_proc.vocab.stoi[unk]
         self.n_vocab = len(text_proc.vocab.stoi)
         self.stoi = text_proc.vocab.stoi
         self.itos = text_proc.vocab.itos
@@ -192,10 +196,13 @@ class DatasetMSRVTT(Dataset):
         return self.pad_idx
 
     def get_bos_idx(self):
-        return self.eos_idx
+        return self.bos_idx
 
     def get_eos_idx(self):
         return self.eos_idx
+
+    def get_unk_idx(self):
+        return self.unk_idx
 
     def get_n_vocab(self):
         return self.n_vocab

@@ -76,6 +76,7 @@ def train(args):
     args.pad_idx = dataset.get_pad_idx()
     args.bos_idx = dataset.get_bos_idx()
     args.eos_idx = dataset.get_eos_idx()
+    args.unk_idx = dataset.get_unk_idx()
     args.n_vocab = dataset.get_n_vocab()
 
     dataloader = DataLoader(dataset, batch_size, shuffle=True, collate_fn=collate_fn)

@@ -75,6 +75,7 @@ def get_total_settings():
     parser.add_argument('--bos', type=str, default='<bos>')
     parser.add_argument('--eos', type=str, default='<eos>')
     parser.add_argument('--pad', type=str, default='<eos>')
+    parser.add_argument('--unk', type=str, default='<unk>')
 
 
     """
