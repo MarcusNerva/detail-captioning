@@ -47,7 +47,7 @@ class CaptionModel(nn.Module):
         _mask = torch.sum(i3d_mask.cpu().float(), dim=1, keepdims=True, dtype=torch.float32)
         _i3d = _i3d / _mask
         
-        _feats = torch.cat([_res2d, _i3d], dim=-1).unsqueeze(0).to(self.device)
+        _feats = torch.cat([_res2d, _i3d], dim=-1).unsqueeze(0).to(self.device).float()
         state_h = self.embed_h(_feats)
         state_c = self.embed_c(_feats)
 

@@ -41,6 +41,7 @@ class Decoder(nn.Module):
 
         res_mask = res_mask.float() * -self.INF
         i3d_mask = i3d_mask.float() * -self.INF
+        res_mask, i3d_mask = res_mask.float(), i3d_mask.float()
 
         """
         process res2d_feats and Ui3d_feats
