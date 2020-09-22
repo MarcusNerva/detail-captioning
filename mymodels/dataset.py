@@ -140,14 +140,17 @@ class DatasetMSRVTT(Dataset):
             seq_mask = pickle.load(f)
         with open(numberic_dict_path, 'rb') as f:
             numberic_dict = pickle.load(f)
-
+        with open(torchtext_path, 'rb') as f:
+            text_proc = pickle.load(f)
+        with open(seq_dict_path, 'rb') as f:
+            self.seq_dict = pickle.load(f)
 
         if not os.path.exists(torchtext_path) or not os.path.exists(seq_dict_path) or not os.path.exists(numberic_dict_path):
             print('extracting words.........')
             get_vocab_and_seq(args)
             print('extracting succeed!')
 
-        for vid in data_range:
+        for vid in self.data_range:
             for number_tensor in numberic_dict[vid]:
                 self.numberic.append(number_tensor)
                 self.video_id.append(vid)
@@ -182,7 +185,7 @@ class DatasetMSRVTT(Dataset):
                 self.res2d_mask[numb_vid], \
                 self.i3d_mask[numb_vid], \
                 self.numberic[idx], \
-                self.mask[idx], \
+                self.word_mask[idx], \
                 self.seq_dict[vid]
 
     def get_pad_idx(self):

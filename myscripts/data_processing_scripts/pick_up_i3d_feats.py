@@ -20,7 +20,7 @@ if __name__ == '__main__':
     
     i3d_list = glob.glob(os.path.join(i3d_dir, '*.npy'))
     i3d_list = sorted(i3d_list, key=lambda i3d_path: int(i3d_path.split('/')[-1].split('.')[0][5:]))
-    i3d_mask = np.zeros((len(i3d_list), 20), dtype=bool)
+    i3d_mask = np.zeros((len(i3d_list), args.length), dtype=bool)
 
     for i, (i3d_path) in enumerate(i3d_list):
         dpp = DPPModel(mode, i3d_path, settings, device)
@@ -30,6 +30,8 @@ if __name__ == '__main__':
 
         old_i3d_feats = np.load(i3d_path)
         new_i3d_feats = np.ascontiguousarray(old_i3d_feats[np.array(Yg)])
-        np.save(i3d_path, new_i3d_feats)
+        i3d_feats = np.zeros((args.length, args.i3d_size))
+        i3d_feats[:new_i3d_feats.shape[0], ...] = new_i3d_feats
+        np.save(i3d_path, i3d_feats)
 
     np.save(args.i3d_mask_path, i3d_mask)
