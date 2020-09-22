@@ -123,57 +123,38 @@ class DatasetMSRVTT(Dataset):
         torchtext_path = args.torchtext_path
         seq_dict_path = args.seq_dict_path
         numberic_dict_path = args.numberic_dict_path
-        datastore_dir = None
+        self.res2d_dir = args.res2d_dir
+        self.i3d_dir = args.i3d_dir
+        self.relation_dir = args.relation_dir
+        self.object_dir = args.object_dir
+        seq_mask_path = args.seq_mask_path
+        res2d_mask_path = args.res2d_mask_path
+        i3d_mask_path = args.i3d_mask_path
 
-        if mode == 'train':
-            datastore_dir = args.train_datastore_dir
-        elif mode == 'valid':
-            datastore_dir = args.valid_datastore_dir
-        else:
-            datastore_dir = args.test_datastore_dir
+        self.numberic = []
+        self.video_id = []
+        self.word_mask = []
+        self.res2d_mask = np.load(res2d_mask_path)
+        self.i3d_mask = np.load(i3d_mask_path)
+        with open(seq_mask_path, 'rb') as f:
+            seq_mask = pickle.load(f)
+        with open(numberic_dict_path, 'rb') as f:
+            numberic_dict = pickle.load(f)
 
-        res2d_path = os.path.join(datastore_dir, 'res2d.pkl')
-        i3d_path = os.path.join(datastore_dir, 'i3d.pkl')
-        relation_path = os.path.join(datastore_dir, 'relation.pkl')
-        object_path = os.path.join(datastore_dir, 'object.pkl')
-        numberic_path = os.path.join(datastore_dir, 'numberic.pkl')
-        video_id_path = os.path.join(datastore_dir, 'video_id.pkl')
-        word_mask_path = os.path.join(datastore_dir, 'word_mask.pkl')
 
         if not os.path.exists(torchtext_path) or not os.path.exists(seq_dict_path) or not os.path.exists(numberic_dict_path):
             print('extracting words.........')
             get_vocab_and_seq(args)
             print('extracting succeed!')
 
-        if not os.path.exists(datastore_dir):
-            os.makedirs(datastore_dir)
-        pkl_list = glob.glob(os.path.join(datastore_dir, '*.pkl'))
-        if(len(pkl_list) < 7):
-            print('constructing data_store.......')
-            make_datastore(args, mode, self.data_range)
-            print('constructing finished!')
+        for vid in data_range:
+            for number_tensor in numberic_dict[vid]:
+                self.numberic.append(number_tensor)
+                self.video_id.append(vid)
+            for mask in seq_mask[vid]:
+                self.word_mask.append(mask)
 
-        with open(torchtext_path, 'rb') as f:
-            text_proc = pickle.load(f)
-        with open(res2d_path, 'rb') as f:
-            self.res2d_dict = pickle.load(f)
-        with open(i3d_path, 'rb') as f:
-            self.i3d_dict = pickle.load(f)
-        with open(relation_path, 'rb') as f:
-            self.relation_dict = pickle.load(f)
-        with open(object_path, 'rb') as f:
-            self.object_dict = pickle.load(f)
-        with open(numberic_path, 'rb') as f:
-            self.numberic = pickle.load(f)
-        with open(video_id_path, 'rb') as f:
-            self.video_id = pickle.load(f)
-        with open(word_mask_path, 'rb') as f:
-            self.word_mask = pickle.load(f)
 
-        self.res2d_mask = np.load(res2d_mask_path)
-        self.i3d_mask = np.load(i3d_mask_path)
-
-            
         pad = args.pad
         bos = args.bos
         eos = args.eos
@@ -189,10 +170,15 @@ class DatasetMSRVTT(Dataset):
         vid = self.video_id[idx]
         numb_vid = int(vid[5:])
 
-        return self.res2d_dict[vid], \
-                self.i3d_dict[vid], \
-                self.relation_dict[vid], \
-                self.object_dict[vid], \
+        res2d = np.load(os.path.join(self.res2d_dir, vid + '.npy'))
+        i3d = np.load(os.path.join(self.i3d_dir, vid + '.npy'))
+        relation = np.load(os.path.join(self.relation_dir, vid + '.npy'))
+        object_ = np.load(os.path.join(self.object_dir, vid + '.npy'))
+
+        return res2d, \
+                i3d, \
+                relation, \
+                object_, \
                 self.res2d_mask[numb_vid], \
                 self.i3d_mask[numb_vid], \
                 self.numberic[idx], \

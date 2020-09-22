@@ -55,7 +55,7 @@ def make_datastore(args, mode, data_range):
         i3d = np.load(i3d_single_path)
         i3d_dict[vid] = i3d
     with open(i3d_path, 'wb') as f:
-        pickle.dump(i3d_path, f)
+        pickle.dump(i3d_dict, f)
     del i3d_dict
     gc.collect()
 
