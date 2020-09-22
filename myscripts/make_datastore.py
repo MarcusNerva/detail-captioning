@@ -56,10 +56,10 @@ def make_datastore(args, mode, data_range):
         relation_dict[vid] = relation
         object_dict[vid] = object_
 
-        for number_tensor in numberic_dict[video_id]:
+        for number_tensor in numberic_dict[vid]:
             numberic.append(number_tensor)
             video_id.append(vid)
-        for mask in seq_mask[video_id]:
+        for mask in seq_mask[vid]:
             word_mask.append(mask)
 
     with open(res2d_path, 'wb') as f:
