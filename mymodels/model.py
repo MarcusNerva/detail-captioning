@@ -18,7 +18,7 @@ class CaptionModel(nn.Module):
         self.unk_idx = args.unk_idx
         
         seed = args.seed
-        vocab_size = args.vocab_size
+        vocab_size = args.n_vocab
         word_size = args.word_size
         torch.manual_seed(seed)
         torch.cuda.manual_seed(seed)
