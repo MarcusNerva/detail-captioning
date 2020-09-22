@@ -61,6 +61,8 @@ def make_datastore(args, mode, data_range):
             video_id.append(vid)
         for mask in seq_mask[vid]:
             word_mask.append(mask)
+        
+        print('{vid} is finished'.format(vid=vid))
 
     with open(res2d_path, 'wb') as f:
         pickle.dump(res2d_dict, f)

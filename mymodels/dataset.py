@@ -145,6 +145,8 @@ class DatasetMSRVTT(Dataset):
             get_vocab_and_seq(args)
             print('extracting succeed!')
 
+        if not os.path.exists(datastore_dir):
+            os.makedirs(datastore_dir)
         pkl_list = glob.glob(os.path.join(datastore_dir, '*.pkl'))
         if(len(pkl_list) < 7):
             print('constructing data_store.......')
