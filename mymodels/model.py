@@ -65,7 +65,7 @@ class CaptionModel(nn.Module):
             xt = self.embed(it)
             xt_mask = word_mask[:, i].unsqueeze(1)
             output, state = self.decoder(res2d, i3d, relation, objects, xt, state, res_mask, i3d_mask, xt_mask)
-            output_word = torch.log_softmax(self.logit(output), dim=1)
+            output_word = torch.log_softmax(self.logit(output.float()), dim=1)
             outputs.append(output_word)
 
         ret_seq = torch.stack(outputs, dim=1)
@@ -122,7 +122,7 @@ class CaptionModel(nn.Module):
         xt = self.embed(it).to(self.device)
         xt_mask = torch.ones([beam_size, 1]).float().to(self.device)
         output, state = self.decoder(res2d, i3d, relation, objects, xt, state, res_mask, i3d_mask, xt_mask)
-        logprob = torch.log_softmax(self.logit(output), dim=1)
+        logprob = torch.log_softmax(self.logit(output.float()), dim=1)
 
         for t in range(self.seq_length):
             # suppress UNK tokens in the decoding. So the probs of 'UNK' are extremely low
@@ -148,7 +148,7 @@ class CaptionModel(nn.Module):
             xt = self.embed(it).to(self.device)
             xt_mask = torch.ones([beam_size, 1]).float().to(self.device)
             output, state = self.decoder(res2d, i3d, relation, objects, xt, state, res_mask, i3d_mask, xt_mask)
-            logprob = torch.log_softmax(self.logit(output), dim=1)
+            logprob = torch.log_softmax(self.logit(output.float()), dim=1)
 
         ret = sorted(ret, key=lambda x: -x['sum_logprob'])[:beam_size]
         return ret
@@ -232,6 +232,6 @@ class CaptionModel(nn.Module):
             xt = xt.to(self.device)
             xt_mask = xt_mask.to(self.device)
             output, state = self.decoder(res2ds, i3ds, relations, objects, xt, state, res_mask, i3d_mask, xt_mask)
-            log_probabilities = torch.log_softmax(self.logit(output), dim=1)
+            log_probabilities = torch.log_softmax(self.logit(output.float()), dim=1)
 
         return torch.cat([_.unsqueeze(1) for _ in seq], 1), torch.cat([_.unsqueeze(1) for _ in seq_probabilities], 1)
