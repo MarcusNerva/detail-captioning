@@ -51,6 +51,9 @@ class Encoder(nn.Module):
             frame_mask: (batch, 20)
             i3d_mask: (batch, 20)
         """
+        frame_mask = frame_mask.float()
+        i3d_mask = i3d_mask.float()
+
         return self.res_to_rnn(res2d_feats) * frame_mask.unsqueeze(-1), \
                 self.i3d_to_rnn(i3d_feats) * i3d_mask.unsqueeze(-1), \
                 self.relation_to_rnn(relation_feats) * frame_mask.unsqueeze(-1).unsqueeze(-1), \

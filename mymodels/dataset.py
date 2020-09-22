@@ -246,8 +246,8 @@ def collate_fn(batch):
     i3d = torch.from_numpy(i3d).float()
     relation = torch.from_numpy(relation).float()
     object_ = torch.from_numpy(object_).float()
-    res2d_mask = torch.from_numpy(res2d_mask).float()
-    i3d_mask = torch.from_numpy(i3d_mask).float()
+    res2d_mask = torch.from_numpy(res2d_mask).bool()
+    i3d_mask = torch.from_numpy(i3d_mask).bool()
     numberic = torch.from_numpy(numberic)
     mask = torch.from_numpy(mask)
 
