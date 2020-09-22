@@ -5,9 +5,14 @@ import torchtext
 from torch.utils.data import Dataset
 import numpy as np
 import os
+import glob
 import json
 import pickle
 from collections import defaultdict
+import sys
+sys.path.append('../')
+from myscripts.make_datastore import make_datastore
+
 
 def get_vocab_and_seq(args):
     """
@@ -112,70 +117,60 @@ class DatasetMSRVTT(Dataset):
         self.eos_idx = None
         self.n_vocab = None
         self.stoi = None
-        self.itos = None
-        
+        self.itos = None 
         self.data_range = self._define_data_range()
-        self.res2d = {}
-        self.i3d = {}
-        self.relation = {}
-        self.object = {}
-        self.numberic = []
-        self.mask = []
-        self.total_numberic = []
-        self.total_sentences = []
-        self.video_id = []
 
-        res2d_dir = args.res2d_dir
-        i3d_dir = args.i3d_dir
-        relation_dir = args.relation_dir
-        object_dir = args.object_dir
-        res2d_mask_path = args.res2d_mask_path
-        i3d_mask_path = args.i3d_mask_path
-        seq_mask_path = args.seq_mask_path
         torchtext_path = args.torchtext_path
         seq_dict_path = args.seq_dict_path
         numberic_dict_path = args.numberic_dict_path
+        datastore_dir = None
+
+        if mode == 'train':
+            datastore_dir = args.train_datastore_dir
+        elif mode == 'valid':
+            datastore_dir = args.valid_datastore_dir
+        else:
+            datastore_dir = args.test_datastore_dir
+
+        res2d_path = os.path.join(datastore_dir, 'res2d.pkl')
+        i3d_path = os.path.join(datastore_dir, 'i3d.pkl')
+        relation_path = os.path.join(datastore_dir, 'relation.pkl')
+        object_path = os.path.join(datastore_dir, 'object.pkl')
+        numberic_path = os.path.join(datastore_dir, 'numberic.pkl')
+        video_id_path = os.path.join(datastore_dir, 'video_id.pkl')
+        word_mask_path = os.path.join(datastore_dir, 'word_mask.pkl')
 
         if not os.path.exists(torchtext_path) or not os.path.exists(seq_dict_path) or not os.path.exists(numberic_dict_path):
             print('extracting words.........')
             get_vocab_and_seq(args)
             print('extracting succeed!')
 
+        pkl_list = glob.glob(os.path.join(datastore_dir, '*.pkl'))
+        if(len(pkl_list) < 7):
+            print('constructing data_store.......')
+            make_datastore(args, mode, self.data_range)
+            print('constructing finished!')
+
         with open(torchtext_path, 'rb') as f:
             text_proc = pickle.load(f)
-        with open(seq_dict_path, 'rb') as f:
-            self.seq_dict = pickle.load(f)
-        with open(numberic_dict_path, 'rb') as f:
-            self.numberic_dict = pickle.load(f)
-        with open(seq_mask_path, 'rb') as f:
-            self.seq_mask = pickle.load(f)
+        with open(res2d_path, 'rb') as f:
+            self.res2d_dict = pickle.load(f)
+        with open(i3d_path, 'rb') as f:
+            self.i3d_dict = pickle.load(f)
+        with open(relation_path, 'rb') as f:
+            self.relation_dict = pickle.load(f)
+        with open(object_path, 'rb') as f:
+            self.object_dict = pickle.load(f)
+        with open(numberic_path, 'rb') as f:
+            self.numberic = pickle.load(f)
+        with open(video_id_path, 'rb') as f:
+            self.video_id = pickle.load(f)
+        with open(word_mask_path, 'rb') as f:
+            self.word_mask = pickle.load(f)
+
         self.res2d_mask = np.load(res2d_mask_path)
         self.i3d_mask = np.load(i3d_mask_path)
 
-
-        for video_id in self.data_range:
-            vid = int(video_id[5:])
-            res2d_path = os.path.join(res2d_dir, video_id + '.npy')
-            i3d_path = os.path.join(i3d_dir, video_id + '.npy')
-            relation_path = os.path.join(relation_dir, video_id + '.npy')
-            object_path = os.path.join(object_dir, video_id + '.npy')
-
-            res2d = np.load(res2d_path)
-            i3d = np.load(i3d_path)
-            relation = np.load(relation_path)
-            object_ = np.load(object_path)
-
-            self.res2d[vid] = res2d
-            self.i3d[vid] = i3d
-            self.relation[vid] = relation
-            self.object[vid] = object_
-            
-            for number_tensor in self.numberic_dict[video_id]:
-                self.numberic.append(number_tensor)
-                self.video_id.append(vid)
-            for mask in self.seq_mask[video_id]:
-                self.mask.append(mask)
-            
             
         pad = args.pad
         bos = args.bos
@@ -190,17 +185,17 @@ class DatasetMSRVTT(Dataset):
 
     def __getitem__(self, idx):
         vid = self.video_id[idx]
-        str_vid = 'video' + str(vid)
+        numb_vid = int(vid[5:])
 
-        return self.res2d[vid], \
-                self.i3d[vid], \
-                self.relation[vid], \
-                self.object[vid], \
-                self.res2d_mask[vid], \
-                self.i3d_mask[vid], \
+        return self.res2d_dict[vid], \
+                self.i3d_dict[vid], \
+                self.relation_dict[vid], \
+                self.object_dict[vid], \
+                self.res2d_mask[numb_vid], \
+                self.i3d_mask[numb_vid], \
                 self.numberic[idx], \
                 self.mask[idx], \
-                self.seq_dict[str_vid]
+                self.seq_dict[vid]
 
     def get_pad_idx(self):
         return self.pad_idx

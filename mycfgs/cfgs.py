@@ -34,6 +34,10 @@ def get_total_settings():
     parser.add_argument('--numberic_dict_path', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/numberic_dict.pkl')
     parser.add_argument('--checkpoints_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/checkpoints')
 
+    parser.add_argument('--train_datastore_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/train')
+    parser.add_argument('--valid_datastore_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/valid')
+    parser.add_argument('--test_datastore_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/test')
+
 
     """
     =====================DPP Settings=====================
