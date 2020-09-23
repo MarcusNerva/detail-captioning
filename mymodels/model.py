@@ -30,6 +30,7 @@ class CaptionModel(nn.Module):
         self.embed = nn.Embedding(vocab_size, word_size)
         self.logit = nn.Linear(word_size, vocab_size)
         self.device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+        self.vocab_size = vocab_size
         self.init_weights()
 
     def init_weights(self):
@@ -59,7 +60,10 @@ class CaptionModel(nn.Module):
         outputs = []
 
         for i in range(word_seq.shape[1]):
-            if i > 0 and word_seq[:, i].sum() == 0: break
+            if i > 0 and word_seq[:, i].sum() == 0:
+                output_word = torch.zeros(word_seq.shape[0], self.vocab_size)
+                outputs.append(output_word)
+                continue
 
             it = word_seq[:, i].clone()
             xt = self.embed(it)
