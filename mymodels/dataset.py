@@ -9,9 +9,6 @@ import glob
 import json
 import pickle
 from collections import defaultdict
-import sys
-sys.path.append('../')
-from myscripts.make_datastore import make_datastore
 
 
 def get_vocab_and_seq(args):

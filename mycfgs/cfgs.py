@@ -72,6 +72,7 @@ def get_total_settings():
     parser.add_argument('--vocab_size', type=int, default=-1)
     parser.add_argument('--beam_size', type=int, default=1)
     parser.add_argument('--sample_max', type=int, default=1)
+    parser.add_argument('--temperature', type=float, default=1.0)
     parser.add_argument('--bos', type=str, default='<bos>')
     parser.add_argument('--eos', type=str, default='<eos>')
     parser.add_argument('--pad', type=str, default='<eos>')
