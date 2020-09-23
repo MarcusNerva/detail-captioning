@@ -150,7 +150,7 @@ class CaptionModel(nn.Module):
 
             it = beam_seq[:, t].to(self.device)
             xt = self.embed(it).to(self.device)
-            xt_mask = torch.ones([beam_size, 1]).float().to(self.device)
+            xt_mask = torch.ones([beam_size, 1]).double().to(self.device)
             output, state = self.decoder(res2d, i3d, relation, objects, xt, state, res_mask, i3d_mask, xt_mask)
             logprob = torch.log_softmax(self.logit(output), dim=1)
 
@@ -229,13 +229,13 @@ class CaptionModel(nn.Module):
                 seq_probabilities.append(sampleLogprobs.view(-1))
                 
             if t == 0:
-                xt_mask = torch.ones([batch_size, 1]).float()
+                xt_mask = torch.ones([batch_size, 1]).double()
             else:
-                xt_mask = unfinished.unsqueeze(-1).float()
+                xt_mask = unfinished.unsqueeze(-1).double()
 
             xt = xt.to(self.device)
             xt_mask = xt_mask.to(self.device)
             output, state = self.decoder(res2ds, i3ds, relations, objects, xt, state, res_mask, i3d_mask, xt_mask)
-            log_probabilities = torch.log_softmax(self.logit(output.float()), dim=1)
+            log_probabilities = torch.log_softmax(self.logit(output.double()), dim=1)
 
         return torch.cat([_.unsqueeze(1) for _ in seq], 1), torch.cat([_.unsqueeze(1) for _ in seq_probabilities], 1)
