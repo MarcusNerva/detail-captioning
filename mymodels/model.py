@@ -61,7 +61,7 @@ class CaptionModel(nn.Module):
 
         for i in range(word_seq.shape[1]):
             if i > 0 and word_seq[:, i].sum() == 0:
-                output_word = torch.zeros(word_seq.shape[0], self.vocab_size)
+                output_word = torch.zeros(word_seq.shape[0], self.vocab_size).to(device)
                 outputs.append(output_word)
                 continue
 
