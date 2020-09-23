@@ -43,7 +43,7 @@ def decode_idx(seq, itow, eos_idx):
 
 
 @torch.no_grad()
-def eval(args, model, dataset, device):
+def eval(args, model, dataset, device, collate_fn):
     
     batch_size = args.batch_size
     itow = dataset.get_itos()

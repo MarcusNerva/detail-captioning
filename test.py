@@ -2,7 +2,7 @@
 # coding=utf-8
 import torch
 import os
-from mymodels import CaptionModel, DatasetMSRVTT
+from mymodels import CaptionModel, DatasetMSRVTT, collate_fn
 from mycfgs.cfgs import get_total_settings
 from myscripts.eval import eval
 
@@ -22,5 +22,5 @@ if __name__ == '__name__':
     model = model.load_state_dict(torch.load(checkpoints_path))
     model.to(device)
 
-    language_state = eval(args, model, test_dataset, device)
+    language_state = eval(args, model, test_dataset, device, collate_fn)
     print(language_state)

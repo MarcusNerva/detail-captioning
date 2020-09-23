@@ -148,9 +148,9 @@ def train(args):
 
             is_best = False
             if (i + 1) % save_checkpoint_every == 0:
-                language_state = eval(args, model, valid_dataset, device)
+                language_state = eval(args, model, valid_dataset, device, collate_fn)
                 current_score = language_state['CIDEr']
-                vis.log('{}'.format('cider score is ' + str(current_score)) + ' ' + '+ ' + str(i))
+                vis.log('{}'.format('=====cider score is ' + str(current_score)) + ' iter= ' + str(i))
 
                 if best_score is None or best_score < current_score:
                     is_best = True
