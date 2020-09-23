@@ -41,7 +41,7 @@ def get_self_critical_reward(args, model, res2ds, i3ds, relations, objects, res_
     return reward
 
 def clip_gradient(optimizer, grad_clip):
-    for group in optimizer:
+    for group in optimizer.param_groups:
         for param in group['params']:
             if param.grad is None: continue
             param.grad.data.clamp_(-grad_clip, grad_clip)
@@ -142,8 +142,8 @@ def train(args):
 
             if i % visualize_every == 0:
                 vis.plot('train_loss', loss_meter.value()[0])
-                information = 'best_score is' + (str(best_score) if best_score is not None else '0.0')
-                information += ('reward is' if sc_flag else 'loss is ') + str(train_loss.item())
+                information = 'best_score is ' + (str(best_score) if best_score is not None else '0.0')
+                information += (' reward is ' if sc_signal else 'loss is ') + str(train_loss.item())
                 vis.log(information)
 
             is_best = False
