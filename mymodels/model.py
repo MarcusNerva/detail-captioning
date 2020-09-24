@@ -193,7 +193,7 @@ class CaptionModel(nn.Module):
         args = self.args
         sample_max = args.sample_max if is_sample_max else 0
         beam_size = args.beam_size
-        batch_size = args.batch_size
+        batch_size = res2ds.shape[0]
         temperature = args.temperature
 
         res2ds, i3ds, relations, objects = self.encoder(res2ds, i3ds, relations, objects, res_mask, i3d_mask)

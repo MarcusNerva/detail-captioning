@@ -63,7 +63,7 @@ def eval(args, model, dataset, device, collate_fn):
         
         pred, _ = model.sample(res2d, i3d, relation, object_, res2d_mask, i3d_mask)
         pred = pred.cpu().numpy()
-        pred = [decode_idx(temp_seq, itow, args.eos_idx) for temp_seq in seq]
+        pred = [decode_idx(temp_seq, itow, args.eos_idx) for temp_seq in pred]
         predictions += pred
         gts.append(seq)
 
