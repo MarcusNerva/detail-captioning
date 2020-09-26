@@ -238,6 +238,6 @@ class CaptionModel(nn.Module):
             output, state = self.decoder(res2ds, i3ds, relations, objects, xt, state, res_mask, i3d_mask, xt_mask)
             log_probabilities = torch.log_softmax(self.logit(output.double()), dim=1)
 
-        seq.append(it)
+        seq.append(it.new(batch_size).long().fill_(self.eos_idx))
         seq_probabilities.append(sampleLogprobs.view(-1))
         return torch.cat([_.unsqueeze(1) for _ in seq], 1), torch.cat([_.unsqueeze(1) for _ in seq_probabilities], 1)
