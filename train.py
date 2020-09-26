@@ -31,7 +31,7 @@ def get_self_critical_reward(args, itow, model, res2ds, i3ds, relations, objects
         res[i] = [decode_idx(greedy_sample[i - batch_size], itow, eos_idx)]
 
     for i in range(batch_size):
-        gts[i] = [decode_idx(single_gts, itow, eos_idx) for single_gts in ground_truths[i]]
+        gts[i] = [single_gts for single_gts in ground_truths[i]]
     gts = {i: gts[i % batch_size] for i in range(double_batch_size)}
 
     assert len(gts.keys()) == len(res.keys()), 'len of gts.keys is not equal to that of res.keys'
