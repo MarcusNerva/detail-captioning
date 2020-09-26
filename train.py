@@ -130,7 +130,7 @@ def train(args):
                 loss = crit(preds, numberic, mask, args.eos_idx)
             else:
                 probability_sample, sample_logprobs = model.sample(res2d, i3d, relation, object_, res2d_mask, i3d_mask, False)
-                reward = get_self_critical_reward(model, res2d, i3d, relation, object_, res2d_mask, i3d_mask, probability_sample, seq)
+                reward = get_self_critical_reward(args, model, res2d, i3d, relation, object_, res2d_mask, i3d_mask, probability_sample, seq)
                 reward = torch.from_numpy(reward).float()
                 reward = reward.to(device)
                 loss = rl_crit(sample_logprobs, probability_sample, reward)

@@ -65,7 +65,8 @@ def eval(args, model, dataset, device, collate_fn):
         pred = pred.cpu().numpy()
         pred = [decode_idx(temp_seq, itow, args.eos_idx) for temp_seq in pred]
         predictions += pred
-        gts.append(seq)
+        seq = [single_seq_list for single_seq_list in seq]
+        gts += seq
 
     model.train()
     language_state = language_eval(predictions, gts)
