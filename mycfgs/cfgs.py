@@ -98,7 +98,7 @@ def get_total_settings():
     parser.add_argument('--patience', type=int, default=30)
 
     parser.add_argument('--learning_rate', type=float, default=3e-4, help='learning rate')
-    parser.add_argument('--learning_rate_decay_start', type=int, default=4, help='after how many iteration begin learning rate decay')
+    parser.add_argument('--learning_rate_decay_start', type=int, default=6, help='after how many iteration begin learning rate decay')
     parser.add_argument('--learning_rate_decay_every', type=int, default=4, help='for every x iteration learning rate have to decay')
     parser.add_argument('--learning_rate_decay_rate', type=float, default=0.5)
     parser.add_argument('--weight_decay', type=float, default=0, help='weight decay')
