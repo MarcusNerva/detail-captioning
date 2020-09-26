@@ -15,9 +15,10 @@ from mycfgs.cfgs import get_total_settings
 from mytools import Visualizer
 from myscripts.eval import eval, decode_idx
 
-def get_self_critical_reward(args, model, res2ds, i3ds, relations, objects, res_mask, i3d_mask, probability_sample, ground_truths):
+def get_self_critical_reward(args, itow, model, res2ds, i3ds, relations, objects, res_mask, i3d_mask, probability_sample, ground_truths):
     batch_size = args.batch_size
     seq_length = args.seq_length
+    eos_idx = args.eos_idx
     double_batch_size = batch_size * 2
     
     greedy_sample, _ = model.sample(res2ds, i3ds, relations, objects, res_mask, i3d_mask)
@@ -25,12 +26,12 @@ def get_self_critical_reward(args, model, res2ds, i3ds, relations, objects, res_
     greedy_sample, probability_sample = greedy_sample.cpu().numpy(), probability_sample.cpu().numpy()
     
     for i in range(batch_size):
-        res[i] = [decode_idx(probability_sample[i])]
+        res[i] = [decode_idx(probability_sample[i], itow, eos_idx)]
     for i in range(batch_size, double_batch_size):
-        res[i] = [decode_idx(greedy_sample[i - batch_size])]
+        res[i] = [decode_idx(greedy_sample[i - batch_size], itow, eos_idx)]
 
     for i in range(batch_size):
-        gts[i] = [decode_idx(single_gts) for single_gts in ground_truths[i]]
+        gts[i] = [decode_idx(single_gts, itow, eos_idx) for single_gts in ground_truths[i]]
     gts = {i: gts[i % batch_size] for i in range(double_batch_size)}
 
     assert len(gts.keys()) == len(res.keys()), 'len of gts.keys is not equal to that of res.keys'
@@ -78,6 +79,8 @@ def train(args):
     args.eos_idx = dataset.get_eos_idx()
     args.unk_idx = dataset.get_unk_idx()
     args.n_vocab = dataset.get_n_vocab()
+    itow = dataset.get_itos()
+
 
     dataloader = DataLoader(dataset, batch_size, shuffle=True, collate_fn=collate_fn)
     vis = Visualizer(env='train model')
@@ -130,7 +133,7 @@ def train(args):
                 loss = crit(preds, numberic, mask, args.eos_idx)
             else:
                 probability_sample, sample_logprobs = model.sample(res2d, i3d, relation, object_, res2d_mask, i3d_mask, False)
-                reward = get_self_critical_reward(args, model, res2d, i3d, relation, object_, res2d_mask, i3d_mask, probability_sample, seq)
+                reward = get_self_critical_reward(args, itow, model, res2d, i3d, relation, object_, res2d_mask, i3d_mask, probability_sample, seq)
                 reward = torch.from_numpy(reward).float()
                 reward = reward.to(device)
                 loss = rl_crit(sample_logprobs, probability_sample, reward)
