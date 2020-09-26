@@ -223,7 +223,7 @@ class CaptionModel(nn.Module):
                     unfinished = it > 0
                 else:
                     unfinished = unfinished * (it > 0)
-                if unfinished.sum() == 0: break
+                # if unfinished.sum() == 0: break
                 it = it * unfinished.type_as(it)
                 seq.append(it)
                 seq_probabilities.append(sampleLogprobs.view(-1))
