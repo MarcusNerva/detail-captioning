@@ -63,6 +63,16 @@ def get_total_settings():
     """
     parser.add_argument('--word_size', type=int, default=512)
 
+    
+    """
+    =====================Transformer Settings=====================
+    """
+    parser.add_argument('--n_layers', type=int, default=2)
+    parser.add_argument('--n_heads', type=int, default=8)
+    parser.add_argument('--d_model', type=int, default=512)
+    parser.add_argument('--d_hidden', type=int, default=2048)
+    parser.add_argument('--d_features', type=int, default=512 * 5)
+    parser.add_argument('--trans_dropout', type=float, default=0.3)
 
 
     """
@@ -88,12 +98,12 @@ def get_total_settings():
     parser.add_argument('--patience', type=int, default=30)
 
     parser.add_argument('--learning_rate', type=float, default=3e-4, help='learning rate')
-    parser.add_argument('--learning_rate_decay_start', type=int, default=3, help='after how many iteration begin learning rate decay')
+    parser.add_argument('--learning_rate_decay_start', type=int, default=4, help='after how many iteration begin learning rate decay')
     parser.add_argument('--learning_rate_decay_every', type=int, default=4, help='for every x iteration learning rate have to decay')
     parser.add_argument('--learning_rate_decay_rate', type=float, default=0.5)
     parser.add_argument('--weight_decay', type=float, default=0, help='weight decay')
 
-    parser.add_argument('--self_critical_after', type=int, default=-1, help='after train x epochs use self_critical strategy')
+    parser.add_argument('--self_critical_after', type=int, default=8, help='after train x epochs use self_critical strategy')
     
     parser.add_argument('--visualize_every', type=int, default=10, help='show us loss every x iteration')
 
