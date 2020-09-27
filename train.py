@@ -181,7 +181,7 @@ def train(args):
                     settings_dict['best_score'] = best_score
                     torch.save(model.state_dict(), best_model_path)
                     with open(best_settings_path, 'wb') as f:
-                        pickle.dump(setting_dict, f)
+                        pickle.dump(settings_dict, f)
 
         epoch += 1
     
