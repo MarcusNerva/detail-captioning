@@ -104,7 +104,7 @@ def get_total_settings():
     parser.add_argument('--learning_rate_decay_rate', type=float, default=0.5)
     parser.add_argument('--weight_decay', type=float, default=0, help='weight decay')
 
-    parser.add_argument('--self_critical_after', type=int, default=8, help='after train x epochs use self_critical strategy')
+    parser.add_argument('--self_critical_after', type=int, default=9, help='after train x epochs use self_critical strategy')
     
     parser.add_argument('--visualize_every', type=int, default=10, help='show us loss every x iteration')
 

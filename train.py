@@ -7,6 +7,7 @@ from torchnet import meter
 from collections import OrderedDict
 import os
 import numpy as np
+import pickle
 
 from myscripts.coco_caption.pycocoevalcap.cider.cider import Cider
 from mymodels import CaptionModel, DatasetMSRVTT, collate_fn
@@ -54,7 +55,7 @@ def set_learning_rate(optimizer, lr):
 def train(args):
     batch_size = args.batch_size
     seed = args.seed
-    checkpoint_dir = args.checkpoints_dir
+    checkpoints_dir = args.checkpoints_dir
     grad_clip = args.grad_clip
     learning_rate = args.learning_rate
     learning_rate_decay_start = args.learning_rate_decay_start
@@ -66,7 +67,8 @@ def train(args):
     visualize_every = args.visualize_every
     self_critical_after = args.self_critical_after
 
-    best_model_path = os.path.join(checkpoint_dir, 'best_model.pth')
+    best_model_path = os.path.join(checkpoints_dir, 'best_model.pth')
+    best_settings_path = os.path.join(checkpoints_dir, 'best_settings.pkl')
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     torch.manual_seed(seed)
@@ -81,17 +83,10 @@ def train(args):
     args.n_vocab = dataset.get_n_vocab()
     itow = dataset.get_itos()
 
-
     dataloader = DataLoader(dataset, batch_size, shuffle=True, collate_fn=collate_fn)
     vis = Visualizer(env='train model')
     model = CaptionModel(args)
 
-    if args.continue_to_train:
-        if not os.path.exists(best_model_path):
-            raise Exception('wanted to continue training, yet best model is not exist')
-        model.load_state_dict(torch.load(best_model_path))
-
-    model = model.double()
     optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
     loss_meter = meter.AverageValueMeter()
     crit = LanguageModelCriterion()
@@ -102,6 +97,18 @@ def train(args):
     sc_signal = False
     best_score = None
 
+    if args.continue_to_train:
+        if not os.path.exists(best_model_path) or not os.path.exists(best_settings_path):
+            raise Exception('wanted to continue training, yet best model is not exist')
+        model.load_state_dict(torch.load(best_model_path))
+        with open(best_settings_path, 'rb') as f:
+            settings_dict = pickle.load(f)
+        patience_cnt = settings_dict['patience_cnt']
+        epoch = settings_dict['epoch']
+        sc_signal = settings_dict['sc_signal']
+        best_score = settings_dict['best_score']
+
+    model = model.double()
     model.to(device)
     model.train()
 
@@ -167,7 +174,14 @@ def train(args):
                     patience_cnt = 0
 
                 if is_best:
+                    settings_dict = {}
+                    settings_dict['patience_cnt'] = patience_cnt
+                    settings_dict['epoch'] = epoch
+                    settings_dict['sc_signal'] = sc_signal
+                    settings_dict['best_score'] = best_score
                     torch.save(model.state_dict(), best_model_path)
+                    with open(best_settings_path, 'wb') as f:
+                        pickle.dump(setting_dict, f)
 
         epoch += 1
     
