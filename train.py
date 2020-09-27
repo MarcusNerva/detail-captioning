@@ -16,7 +16,7 @@ from mytools import Visualizer
 from myscripts.eval import eval, decode_idx
 
 def get_self_critical_reward(args, itow, model, res2ds, i3ds, relations, objects, res_mask, i3d_mask, probability_sample, ground_truths):
-    batch_size = args.batch_size
+    batch_size = res2ds.shape[0]
     seq_length = args.seq_length
     eos_idx = args.eos_idx
     double_batch_size = batch_size * 2
@@ -85,6 +85,12 @@ def train(args):
     dataloader = DataLoader(dataset, batch_size, shuffle=True, collate_fn=collate_fn)
     vis = Visualizer(env='train model')
     model = CaptionModel(args)
+
+    if args.continue_to_train:
+        if not os.path.exists(best_model_path):
+            raise Exception('wanted to continue training, yet best model is not exist')
+        model.load_state_dict(torch.load(best_model_path))
+
     model = model.double()
     optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
     loss_meter = meter.AverageValueMeter()

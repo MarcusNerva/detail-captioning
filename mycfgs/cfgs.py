@@ -96,6 +96,7 @@ def get_total_settings():
     parser.add_argument('--grad_clip', type=float, default=0.1)
     parser.add_argument('--save_checkpoint_every', type=int, default=500)
     parser.add_argument('--patience', type=int, default=30)
+    parser.add_argument('--continue_to_train', action='store_true')
 
     parser.add_argument('--learning_rate', type=float, default=3e-4, help='learning rate')
     parser.add_argument('--learning_rate_decay_start', type=int, default=6, help='after how many iteration begin learning rate decay')
