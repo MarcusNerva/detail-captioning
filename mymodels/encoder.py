@@ -60,6 +60,60 @@ class Encoder(nn.Module):
                 self.object_to_rnn(object_feats) * frame_mask.unsqueeze(-1).unsqueeze(-1)
 
 
+class Encoder_trans(nn.Module):
+    def __init__(self, args):
+        super(Encoder_trans, self).__init__()
+        seed = args.seed
+        self.drop_prob = args.drop_prob
+        self.d_model = args.d_model
+        self.length = args.length
+        self.res2d_size = args.res2d_size
+        self.i3d_size = args.i3d_size
+        self.relation_size = args.relation_size
+        self.object_size = args.object_size
+
+        torch.manual_seed(seed)
+        torch.cuda.manual_seed(seed)
+        
+        self.res_convert = Linear_layer(seed, self.drop_prob, self.res2d_size, self.d_model, self.length, True)
+        self.i3d_convert = Linear_layer(seed, self.drop_prob, self.i3d_size, self.d_model, self.length, True)
+        self.relation_convert = Linear_layer(seed, self.drop_prob, self.relation_size, self.d_model, self.length, False)
+        self.object_convert = Linear_layer(seed, self.drop_prob, self.object_size, self.d_model, self.length, False)
+
+
+    def forward(self, res2d_feats, i3d_feats, relation_feats, object_feats):
+        """
+        Pickup static/dynamic frames up to 20. Abandoned mask mechanism.
+
+        Args:
+            res2d_feats
+            i3d_feats
+            relation_feats
+            object_feats
+
+        Shapes:
+            res2d_feats.shape == (batch, 20, 2048)
+            i3d_feats.shape == (batch, 20, 1024)
+            relation_feats.shape == (batch, 20, 10, 1024)
+            object_feats.shape == (batch, 20, 10, 2048)
+            ====================================
+            vis_feats0.shape == (batch, 20, 512 * 2)
+            vis_feats1.shape == (batch, 20, 512 * 2)
+        """
+        batch_size = res2d_feats.shape[0]
+        res2d_feats = self.res_convert(res2d_feats) # ->(batch, 20, 512)
+        i3d_feats = self.i3d_convert(i3d_feats) # ->(batch, 20, 512)
+        relation_feats = self.relation_convert(relation_feats) # ->(batch, 20, 10, 512)
+        object_feats = self.object_convert(object_feats) # ->(batch, 20, 10, 512)
+
+        relation_feats = relation_feats.view(batch_size, -1, self.d_model).contiguous() # ->(batch, 200, 512)
+        object_feats = object_feats.view(batch_size, -1, self.d_model).contiguous() # ->(batch, 200, 512)
+
+        global_feats = torch.cat([res2d_feats, i3d_feats], dim=-1)
+        detail_feats = torch.cat([relation_feats, object_feats], dim=-1)
+
+        return global_feats, detail_feats
+
 if __name__ == '__main__':
     import argparse
 
