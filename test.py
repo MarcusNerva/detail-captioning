@@ -7,7 +7,7 @@ from mycfgs.cfgs import get_total_settings
 from myscripts.eval import eval
 
 
-if __name__ == '__name__':
+if __name__ == '__main__':
     args = get_total_settings()
     checkpoints_path = os.path.join(args.checkpoints_dir, 'best_model.pth')
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
