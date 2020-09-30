@@ -16,6 +16,7 @@ if __name__ == '__main__':
     args.pad_idx = test_dataset.get_pad_idx()
     args.bos_idx = test_dataset.get_bos_idx()
     args.eos_idx = test_dataset.get_eos_idx()
+    args.unk_idx = test_dataset.get_unk_idx()
     args.n_vocab = test_dataset.get_n_vocab()
     
     model = CaptionModel(args)
