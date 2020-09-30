@@ -43,8 +43,9 @@ def get_total_settings():
     =====================DPP Settings=====================
     """
     parser.add_argument('--n_pick', type=int, default=20)
-    parser.add_argument('--eps', type=float, default=0.01)
-
+    # parser.add_argument('--eps', type=float, default=0.01)
+    parser.add_argument('--i3d_eps', type=float, default=0)
+    parser.add_argument('--frames_eps', type=float, default=0)
 
     """
     =====================Encoder Settings=====================

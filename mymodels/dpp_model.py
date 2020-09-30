@@ -21,21 +21,24 @@ class DPPModel:
         self.n_items = -1 #Does not know yet
         self.kernel_matrix = None #which is going to be built in build_kernel_matrix()
         self.n_pick = settings['n_pick']
-        self.eps = settings['eps']
+        self.i3d_eps = settings['i3d_eps']
+        self.frames_eps = settings['frames_eps']
         self.mode = mode
         self.feature_dir = feature_dir
         self.extract_model = extract_model
         self.device = device
 
         self.build_kernel_matrix()
+        self.eps = self.frames_eps if self.mode == 'frame' else self.i3d_eps
 
     def build_kernel_matrix(self):
-        if self.eps < 0.0:
-            self.image_path_list = glob.glob(os.path.join(self.feature_dir, '*.jpg'))
-            self.n_items = len(self.image_path_list)
-            return
-
+        
         if self.mode == 'frame':
+            if self.frames_eps < 0.0:
+                self.image_path_list = glob.glob(os.path.join(self.feature_dir, '*.jpg'))
+                self.n_items = len(self.image_path_list)
+                return
+
             mean, std = [0.485, 0.456, 0.406], [0.229, 0.224, 0.225]
             normalize = transforms.Normalize(mean=mean, std=std)
             trans = transforms.Compose([
@@ -62,6 +65,11 @@ class DPPModel:
             self.n_items = feats_embed.shape[0]
 
         else:
+            if self.i3d_eps < 0.0:
+                feats_embed = np.load(self.feature_dir)
+                self.n_items = feats_embed.shape[0]
+                return
+
             feats_embed = np.load(self.feature_dir)
             self.kernel_matrix = feats_embed @ feats_embed.T
             self.n_items = feats_embed.shape[0]
