@@ -9,7 +9,7 @@ from myscripts.eval import eval
 
 if __name__ == '__main__':
     args = get_total_settings()
-    checkpoints_path = os.path.join(args.checkpoints_dir, 'best_model.pth')
+    best_model_path = os.path.join(args.checkpoints_dir, 'best_model.pth')
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     test_dataset = DatasetMSRVTT('test', args)
@@ -20,8 +20,10 @@ if __name__ == '__main__':
     args.n_vocab = test_dataset.get_n_vocab()
     
     model = CaptionModel(args)
-    model = model.load_state_dict(torch.load(checkpoints_path))
+    model = model.double()
     model.to(device)
+    model.load_state_dict(torch.load(best_model_path))
+
 
     language_state = eval(args, model, test_dataset, device, collate_fn)
     print(language_state)
