@@ -26,10 +26,15 @@ class DPPModel:
         self.feature_dir = feature_dir
         self.extract_model = extract_model
         self.device = device
-        
+
         self.build_kernel_matrix()
 
     def build_kernel_matrix(self):
+        if self.eps < 0.0:
+            self.image_path_list = glob.glob(os.path.join(self.feature_dir, '*.jpg'))
+            self.n_items = len(self.image_path_list)
+            return
+
         if self.mode == 'frame':
             mean, std = [0.485, 0.456, 0.406], [0.229, 0.224, 0.225]
             normalize = transforms.Normalize(mean=mean, std=std)
@@ -62,6 +67,10 @@ class DPPModel:
             self.n_items = feats_embed.shape[0]
 
     def dpp(self):
+        if self.eps < 0.0:
+            Yg = np.linspace(0, self.n_items, num=self.n_pick, endpoint=False, dtype=np.int).tolist()
+            return Yg
+
         c = np.zeros((self.n_pick, self.n_items))
         d = np.copy(np.diag(self.kernel_matrix))
         j = np.argmax(d)
