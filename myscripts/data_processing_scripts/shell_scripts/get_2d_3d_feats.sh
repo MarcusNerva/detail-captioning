@@ -96,10 +96,10 @@ origin_res2d_mask=${data_dir}"/res2d_mask.npy"
 origin_i3d_mask=${data_dir}"/i3d_mask.npy"
 
 nohup cp -r ${origin_object_features} ${datastore_object_features} > log/cp_object_features.log 2>&1 &
-nohup cp -r ${origin_relation_features} ${datastore_relation_features} > log/cp_relation_features 2>&1 &
-nohup cp -r ${origin_res2d_features} ${datastore_res2d_features} > log/cp_res2d_features 2>&1 &
-nohup cp -r ${origin_i3d_features} ${datastore_i3d_features} > log/cp_i3d_features 2>&1 &
-nohup cp ${origin_res2d_mask} ${datastore_res2d_mask} > log/cp_res2d_mask 2>&1 &
-nohup cp ${origin_i3d_mask} ${datastore_i3d_mask} > log/cp_i3d_mask 2>&1 &
+nohup cp -r ${origin_relation_features} ${datastore_relation_features} > log/cp_relation_features.log 2>&1 &
+nohup cp -r ${origin_res2d_features} ${datastore_res2d_features} > log/cp_res2d_features.log 2>&1 &
+nohup cp -r ${origin_i3d_features} ${datastore_i3d_features} > log/cp_i3d_features.log 2>&1 &
+nohup cp ${origin_res2d_mask} ${datastore_res2d_mask} > log/cp_res2d_mask.log 2>&1 &
+nohup cp ${origin_i3d_mask} ${datastore_i3d_mask} > log/cp_i3d_mask.log 2>&1 &
 
 
