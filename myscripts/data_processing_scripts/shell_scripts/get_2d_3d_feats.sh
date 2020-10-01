@@ -28,7 +28,8 @@ elif [ $manual -eq 1 ];then
     datastore_dir="/home/hanhuaye/PythonProject/detail-captioning/datastore/pickup_full"
 elif [ $manual -eq 2 ];then
     datastore_dir="/home/hanhuaye/PythonProject/detail-captioning/datastore/pickup_threshold"
-    read -p "Please enter frame_eps and i3d_eps respectively: " frame_eps i3d_eps
+    read -p "Please enter frame_eps and i3d_eps respectively
+    (#####WARNING#####: To ensure the consistency of the input eps and eps in cfgs.py, please check cfgs.py before inputing eps): " frame_eps i3d_eps
     sub_dir="res2d_"${frame_eps}"_i3d_"${i3d_eps}
     datastore_dir=${datastore_dir}"/"${sub_dir}
 else
