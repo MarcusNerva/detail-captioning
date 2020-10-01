@@ -32,7 +32,6 @@ class DPPModel:
         self.eps = self.frames_eps if self.mode == 'frame' else self.i3d_eps
 
     def build_kernel_matrix(self):
-        
         if self.mode == 'frame':
             if self.frames_eps < 0.0:
                 self.image_path_list = glob.glob(os.path.join(self.feature_dir, '*.jpg'))
@@ -98,7 +97,7 @@ class DPPModel:
                 d[i] = d[i] - ei * ei
             d[j] = 0
             j = np.argmax(d)
-            if d[j] < self.eps:
+            if self.eps > 0. and d[j] < self.eps:
                 break
             Yg.append(j)
             it += 1
