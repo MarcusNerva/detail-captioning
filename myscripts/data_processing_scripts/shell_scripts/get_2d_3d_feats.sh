@@ -14,9 +14,6 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-nohup cp -r /home/hanhuaye/PythonProject/opensource/kinetics-i3d/i3d_feats \
-    /home/hanhuaye/PythonProject/opensource/kinetics-i3d/data/i3d_feats > log/cp_i3d.log 2>&1 &
-
 echo "If don't PickUp, please set 0.
 If PickUp fully, please set 1.
 If PickUp with threshold, please set 2.
@@ -29,8 +26,10 @@ elif [ $manual -eq 1 ];then
     datastore_dir="/home/hanhuaye/PythonProject/detail-captioning/datastore/pickup_full"
 elif [ $manual -eq 2 ];then
     datastore_dir="/home/hanhuaye/PythonProject/detail-captioning/datastore/pickup_threshold"
-    read -p "Please enter frame_eps and i3d_eps respectively
-    (#####WARNING#####: To ensure the consistency of the input eps and eps in cfgs.py, please check cfgs.py before inputing eps): " frame_eps i3d_eps
+    echo "Please set frame_eps and i3d_eps respectively
+    (#####WARNING#####: To ensure the consistency of the input eps and eps in cfgs.py, please check cfgs.py before inputing eps): "
+    frame_eps=0
+    i3d_eps=0
     sub_dir="res2d_"${frame_eps}"_i3d_"${i3d_eps}
     datastore_dir=${datastore_dir}"/"${sub_dir}
 else
@@ -71,6 +70,7 @@ echo "===============merging res2d_feats is finished! Now time is {$(date "+%Y-%
 python /home/hanhuaye/PythonProject/detail-captioning/myscripts/data_processing_scripts/rearrange_object.py || exit 1
 echo "===============rearranging objects & relation feats is finished! Now time is {$(date "+%Y-%m-%d %H:%M:%S")}==============="
 
+cp -r /home/hanhuaye/PythonProject/opensource/kinetics-i3d/i3d_feats /home/hanhuaye/PythonProject/opensource/kinetics-i3d/data/i3d_feats
 python /home/hanhuaye/PythonProject/detail-captioning/myscripts/data_processing_scripts/pick_up_i3d_feats.py || exit 1
 echo "===============picking up i3d feats is finished! Now time is {$(date "+%Y-%m-%d %H:%M:%S")}==============="
 
