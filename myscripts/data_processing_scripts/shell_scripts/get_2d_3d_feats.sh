@@ -17,10 +17,11 @@ unset __conda_setup
 nohup cp -r /home/hanhuaye/PythonProject/opensource/kinetics-i3d/i3d_feats \
     /home/hanhuaye/PythonProject/opensource/kinetics-i3d/data/i3d_feats > log/cp_i3d.log 2>&1 &
 
-read -p "If don't PickUp, please enter 0.
-If PickUp fully, please enter 1.
-If PickUp with threshold, please enter 2.
-Please choose the manual of PickUp:  " manual
+echo "If don't PickUp, please set 0.
+If PickUp fully, please set 1.
+If PickUp with threshold, please set 2.
+Please choose the manual of PickUp:  " 
+manual=1
 
 if [ $manual -eq 0 ];then
     datastore_dir="/home/hanhuaye/PythonProject/detail-captioning/datastore/not_pickup"
