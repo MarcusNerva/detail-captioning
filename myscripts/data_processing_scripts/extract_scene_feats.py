@@ -56,7 +56,7 @@ def get_resnext101_32x8d(pretrained=False, progress=True, **kwargs):
 
 def extract_features(args, model, device):
     image_dir = args.frames_dir
-    output_dir = args.res2d_dir
+    output_dir = args.raw_res2d_dir
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
