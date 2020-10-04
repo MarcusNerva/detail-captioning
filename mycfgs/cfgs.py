@@ -42,7 +42,7 @@ def get_total_settings():
     =====================MSVD Data Settings=====================
     """
     parser.add_argument('--msvd_data_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/msvd_data')
-    parser.add_argument('--videos_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/msvd_data/msvd_videos')
+    parser.add_argument('--msvd_videos_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/msvd_data/msvd_videos')
 
     parser.add_argument('--frames_subdir', type=str, default='picked_frames')
     parser.add_argument('--raw_res2d_subdir', type=str, default='res2d_features')
