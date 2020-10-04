@@ -14,7 +14,7 @@ def get_total_settings():
 
 
     """
-    =====================Data & Model Path Settings=====================
+    =====================MSR-VTT Data & Model Path Settings=====================
     """
     parser.add_argument('--data_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata')
     parser.add_argument('--videos_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/videos')
@@ -38,6 +38,25 @@ def get_total_settings():
     parser.add_argument('--valid_datastore_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/valid')
     parser.add_argument('--test_datastore_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/test')
 
+    """
+    =====================MSVD Data Settings=====================
+    """
+    parser.add_argument('--msvd_data_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/msvd_data')
+    parser.add_argument('--videos_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/msvd_data/msvd_videos')
+
+    parser.add_argument('--frames_subdir', type=str, default='picked_frames')
+    parser.add_argument('--raw_res2d_subdir', type=str, default='res2d_features')
+    parser.add_argument('--res2d_subdir', type=str, default='res2d_features/features')
+    parser.add_argument('--i3d_subdir', type=str, default='i3d_features')
+    parser.add_argument('--relation_subdir', type=str, default='relation_features')
+    parser.add_argument('--object_subdir', type=str, default='object_features')
+    parser.add_argument('--res2d_mask_subpath', type=str, default='res2d_mask.npy')
+    parser.add_argument('--i3d_mask_subpath', type=str, default='i3d_mask.npy')
+    parser.add_argument('--seq_mask_subpath', type=str, default='seq_mask.pkl')
+    parser.add_argument('--csv_subpath', type=str, default='MSR_Video_Description_Corpus.csv')
+    parser.add_argument('--torchtext_subpath', type=str, default='torchtext.pkl')
+    parser.add_argument('--seq_dict_subpath', type=str, default='seq_dict.pkl')
+    parser.add_argument('--numberic_dict_subpath', type=str, default='numberic_dict.pkl')
 
     """
     =====================DPP Settings=====================
