@@ -6,7 +6,7 @@ import os
 import glob
 import pickle
 import csv
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 import re
 import sys
 sys.path.append('../')
@@ -23,6 +23,7 @@ def get_vocab_and_seq(args):
     """
 
     data_dir = args.msvd_data_dir
+    videos_dir = args.msvd_videos_dir
     csv_subpath = args.csv_subpath
     torchtext_subpath = args.torchtext_subpath
     seq_dict_subpath = args.seq_dict_subpath
@@ -40,9 +41,11 @@ def get_vocab_and_seq(args):
     seq_mask_path = os.path.join(data_dir, seq_mask_subpath)
     numberic_dict_path = os.path.join(data_dir, numberic_dict_subpath)
 
+    video_list = glob.glob(os.path.join(videos_dir, '*.avi'))
+    video_name_list = [video_list[i].split('/')[-1].split('.')[0] for i in range(len(video_list))]
     text_proc = torchtext.data.Field(sequential=True, init_token=bos, eos_token=eos, pad_token=eos,
                                      tokenize='spacy', lower=True, batch_first=True, fix_length=max_length)
-    seq_dict = defaultdict(list)
+    seq_dict = OrderedDict()
     seq_mask = {}
     numberic_dict = {}
     seqs_store = []
@@ -53,10 +56,13 @@ def get_vocab_and_seq(args):
             if len(line) == 0: continue
             language = line[6]
             if language != 'English': continue
-
             video_id = line[0] + '_' + str(line[1]) + '_' + str(line[2])
+            if video_id not in video_name_list: continue
+
             caption = line[7].strip()
             caption = re.sub(r'[^\w\s]', '', caption)
+            if video_id not in seq_dict.keys():
+                seq_dict[video_id] = []
             seq_dict[video_id].append(caption)
             seqs_store.append(caption)
 
