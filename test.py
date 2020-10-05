@@ -2,13 +2,14 @@
 # coding=utf-8
 import torch
 import os
-from mymodels import CaptionModel, DatasetMSRVTT, collate_fn
+from mymodels import CaptionModel, CaptionModel_Part, DatasetMSRVTT, collate_fn
 from mycfgs.cfgs import get_total_settings
 from myscripts.eval import eval
 
 
 if __name__ == '__main__':
     args = get_total_settings()
+    part_model = args.part_model
     args.beam_size = 3
     best_model_path = os.path.join(args.checkpoints_dir, 'best_model.pth')
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -20,7 +21,7 @@ if __name__ == '__main__':
     args.unk_idx = test_dataset.get_unk_idx()
     args.n_vocab = test_dataset.get_n_vocab()
     
-    model = CaptionModel(args)
+    model = CaptionModel_Part(args) if part_model else CaptionModel(args)
     model = model.double()
     model.to(device)
     model.load_state_dict(torch.load(best_model_path))
