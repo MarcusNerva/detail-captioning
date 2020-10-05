@@ -20,6 +20,28 @@ class Linear_layer(nn.Module):
     def forward(self, features):
         return self.linear(features)
 
+class Encoder_Part(nn.Module):
+    def __init__(self, args):
+        super(Encoder_Part, self).__init__()
+        seed = args.seed
+        drop_prob = args.drop_prob
+        res2d_size = args.res2d_size
+        i3d_size = args.i3d_size
+        rnn_size = args.rnn_size
+        length = args.length
+        torch.manual_seed(seed)
+        torch.cuda.manual_seed(seed)
+
+        self.res_to_rnn = Linear_layer(seed, drop_prob, res2d_size, rnn_size, length, True)
+        self.i3d_to_rnn = Linear_layer(seed, drop_prob, i3d_size, rnn_size, length, True)
+
+    def forward(self, res2d_feats, i3d_feats, frame_mask, i3d_mask):
+        frame_mask = frame_mask.float()
+        i3d_mask = i3d_mask.float()
+
+        return self.res_to_rnn(res2d_feats) * frame_mask.unsqueeze(-1), \
+               self.i3d_to_rnn(i3d_feats) * i3d_mask.unsqueeze(-1)
+
 
 class Encoder(nn.Module):
     def __init__(self, args):
@@ -97,8 +119,8 @@ class Encoder_trans(nn.Module):
             relation_feats.shape == (batch, 20, 10, 1024)
             object_feats.shape == (batch, 20, 10, 2048)
             ====================================
-            vis_feats0.shape == (batch, 20, 512 * 2)
-            vis_feats1.shape == (batch, 20, 512 * 2)
+            global_feats.shape == (batch, 20, 512 * 2)
+            detail_feats.shape == (batch, 20, 512 * 2)
         """
         batch_size = res2d_feats.shape[0]
         res2d_feats = self.res_convert(res2d_feats) # ->(batch, 20, 512)

@@ -172,6 +172,8 @@ def train(args):
                     is_best = True
                     best_score = current_score
                     patience_cnt = 0
+                else:
+                    patience_cnt += 1
 
                 if is_best:
                     settings_dict = {}

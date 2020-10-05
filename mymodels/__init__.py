@@ -1,4 +1,3 @@
-from .model import CaptionModel
+from .model import CaptionModel, CaptionModel_Part
 from .dpp_model import DPPModel
-from .dataset import DatasetMSRVTT
-from .dataset import collate_fn
+from .dataset import DatasetMSRVTT, collate_fn

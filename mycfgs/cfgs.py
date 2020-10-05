@@ -43,7 +43,8 @@ def get_total_settings():
     """
     parser.add_argument('--msvd_data_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/msvd_data')
     parser.add_argument('--msvd_videos_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/msvd_data/msvd_videos')
-
+    
+    parser.add_argument('--now_msvd', action='store_true')
     parser.add_argument('--frames_subdir', type=str, default='picked_frames')
     parser.add_argument('--raw_res2d_subdir', type=str, default='res2d_features')
     parser.add_argument('--res2d_subdir', type=str, default='res2d_features/features')
@@ -57,6 +58,7 @@ def get_total_settings():
     parser.add_argument('--torchtext_subpath', type=str, default='torchtext.pkl')
     parser.add_argument('--seq_dict_subpath', type=str, default='seq_dict.pkl')
     parser.add_argument('--numberic_dict_subpath', type=str, default='numberic_dict.pkl')
+    parser.add_argument('--vid_dict_subpath', type=str, default='vid_dict.pkl')
 
     """
     =====================DPP Settings=====================
