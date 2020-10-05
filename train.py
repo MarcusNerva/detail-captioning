@@ -10,7 +10,7 @@ import numpy as np
 import pickle
 
 from myscripts.coco_caption.pycocoevalcap.cider.cider import Cider
-from mymodels import CaptionModel, DatasetMSRVTT, collate_fn
+from mymodels import CaptionModel, CaptionModel_Part, DatasetMSRVTT, collate_fn
 from myscripts.loss import LanguageModelCriterion, RewardCriterion
 from mycfgs.cfgs import get_total_settings
 from mytools import Visualizer
@@ -53,6 +53,7 @@ def set_learning_rate(optimizer, lr):
         group['lr'] = lr
 
 def train(args):
+    part_model = args.part_model
     batch_size = args.batch_size
     seed = args.seed
     checkpoints_dir = args.checkpoints_dir
@@ -85,7 +86,7 @@ def train(args):
 
     dataloader = DataLoader(dataset, batch_size, shuffle=True, collate_fn=collate_fn)
     vis = Visualizer(env='train model')
-    model = CaptionModel(args)
+    model = CaptionModel_Part(args) if part_model else CaptionModel(args)
 
     optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
     loss_meter = meter.AverageValueMeter()

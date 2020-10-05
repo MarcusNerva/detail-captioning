@@ -109,6 +109,7 @@ def get_total_settings():
     parser.add_argument('--eos', type=str, default='<eos>')
     parser.add_argument('--pad', type=str, default='<eos>')
     parser.add_argument('--unk', type=str, default='<unk>')
+    parser.add_argument('--part_model', action='store_true')
 
 
     """

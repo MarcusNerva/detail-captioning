@@ -291,7 +291,7 @@ class CaptionModel_Part(nn.Module):
 
         return (state_h, state_c)
 
-    def forward(self, res2d, i3d, word_seq, res_mask, i3d_mask, word_mask):
+    def forward(self, res2d, i3d, relation, objects, word_seq, res_mask, i3d_mask, word_mask):
         res2d, i3d = self.encoder(res2d, i3d, res_mask, i3d_mask)
         state = self.init_state(res2d, i3d, res_mask, i3d_mask)
         outputs = []
@@ -350,7 +350,7 @@ class CaptionModel_Part(nn.Module):
 
         return beam_seq, beam_seq_logprobs, beam_logprobs_sum, new_state
 
-    def beam_search(self, res2d, i3d, res_mask, i3d_mask, state):
+    def beam_search(self, res2d, i3d, relation, objects, res_mask, i3d_mask, state):
         args = self.args
         beam_size = args.beam_size
 
@@ -394,7 +394,7 @@ class CaptionModel_Part(nn.Module):
         ret = sorted(ret, key=lambda x: -x['sum_logprob'])[:beam_size]
         return ret
 
-    def sample_beam(self, res2ds, i3ds, res_mask, i3d_mask):
+    def sample_beam(self, res2ds, i3ds, relations, objects, res_mask, i3d_mask):
         args = self.args
         beam_size = args.beam_size
         batch_size = res2ds.size(0)
@@ -411,17 +411,20 @@ class CaptionModel_Part(nn.Module):
 
             single_res2d = single_res2d.expand(beam_size, single_res2d.size(0), single_res2d.size(1))
             single_i3d = single_i3d.expand(beam_size, single_i3d.size(0), single_i3d.size(1))
+            single_relation = single_relation.expand(beam_size, single_relation.size(0), single_relation.size(1), single_relation.size(2))
+            single_object = single_object.expand(beam_size, single_object.size(0), single_object.size(1), single_object.size(2))
             single_res_mask = single_res_mask.expand(beam_size, single_res_mask.size(0))
             single_i3d_mask = single_i3d_mask.expand(beam_size, single_i3d_mask.size(0))
             state = self.init_state(single_res2d, single_i3d, single_res_mask, single_i3d_mask)
 
-            done_beam[i] = self.beam_search(single_res2d, single_i3d, single_res_mask, single_i3d_mask, state)
+            done_beam[i] = self.beam_search(single_res2d, single_i3d, single_relation, single_object,
+                                            single_res_mask, single_i3d_mask, state)
             seq[i] = done_beam[i][0]['seq']
             seq_probabilities[i] = done_beam[i][0]['seq_logprob']
 
         return seq, seq_probabilities
 
-    def sample(self, res2ds, i3ds, res_mask, i3d_mask, is_sample_max=True):
+    def sample(self, res2ds, i3ds, relations, objects, res_mask, i3d_mask, is_sample_max=True):
         args = self.args
         sample_max = args.sample_max if is_sample_max else 0
         beam_size = args.beam_size
@@ -431,7 +434,7 @@ class CaptionModel_Part(nn.Module):
         res2ds, i3ds = self.encoder(res2ds, i3ds, res_mask, i3d_mask)
 
         if beam_size > 1:
-            return self.sample_beam(res2ds, i3ds, res_mask, i3d_mask)
+            return self.sample_beam(res2ds, i3ds, relations, objects, res_mask, i3d_mask)
 
         state = self.init_state(res2ds, i3ds, res_mask, i3d_mask)
         seq, seq_probabilities = [], []
