@@ -29,6 +29,7 @@ def get_vocab_and_seq(args):
     seq_dict_subpath = args.seq_dict_subpath
     seq_mask_subpath = args.seq_mask_subpath
     numberic_dict_subpath = args.numberic_dict_subpath
+    vid_dict_subpath = args.vid_dict_subpath
     bos = args.bos
     eos = args.eos
     pad = args.pad
@@ -40,6 +41,7 @@ def get_vocab_and_seq(args):
     seq_dict_path = os.path.join(data_dir, seq_dict_subpath)
     seq_mask_path = os.path.join(data_dir, seq_mask_subpath)
     numberic_dict_path = os.path.join(data_dir, numberic_dict_subpath)
+    vid_dict_path = os.path.join(data_dir, vid_dict_subpath)
 
     video_list = glob.glob(os.path.join(videos_dir, '*.avi'))
     video_name_list = [video_list[i].split('/')[-1].split('.')[0] for i in range(len(video_list))]
@@ -49,6 +51,7 @@ def get_vocab_and_seq(args):
     seq_mask = {}
     numberic_dict = {}
     seqs_store = []
+    vid_dict = {}
 
     with open(csv_path, 'r') as f:
         csv_file = csv.reader(f)
@@ -66,6 +69,7 @@ def get_vocab_and_seq(args):
             seq_dict[video_id].append(caption)
             seqs_store.append(caption)
 
+    seq_dict_keys = list(seq_dict.keys())
     seqs_store = list(map(text_proc.preprocess, seqs_store))
     text_proc.build_vocab(seqs_store, min_freq=1)
     temp_dict = text_proc.vocab.stoi
@@ -73,6 +77,9 @@ def get_vocab_and_seq(args):
 
     temp_dict[unk], temp_dict[eos] = 1, 0
     temp_list[0], temp_list[1] = temp_list[1], temp_list[0]
+
+    for i, (key) in enumerate(seq_dict_keys):
+        vid_dict[key] = i
 
     for video_id in seq_dict:
         sentence_list = seq_dict[video_id]
@@ -103,6 +110,8 @@ def get_vocab_and_seq(args):
         pickle.dump(numberic_dict, f)
     with open(seq_mask_path, 'wb') as f:
         pickle.dump(seq_mask, f)
+    with open(vid_dict_path, 'wb') as f:
+        pickle.dump(vid_dict, f)
 
 if __name__ == '__main__':
     args = get_total_settings()
