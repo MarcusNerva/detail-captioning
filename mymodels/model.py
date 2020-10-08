@@ -406,6 +406,8 @@ class CaptionModel_Part(nn.Module):
         for i in range(batch_size):
             single_res2d = res2ds[i]
             single_i3d = i3ds[i]
+            single_relation = relations[i]
+            single_object = objects[i]
             single_res_mask = res_mask[i]
             single_i3d_mask = i3d_mask[i]
 
