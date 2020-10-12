@@ -187,7 +187,8 @@ class DatasetMSRVTT(Dataset):
                 self.i3d_mask[numb_vid], \
                 self.numberic[idx], \
                 self.word_mask[idx], \
-                self.seq_dict[vid]
+                self.seq_dict[vid], \
+                vid
 
     def get_pad_idx(self):
         return self.pad_idx
@@ -227,7 +228,7 @@ class DatasetMSRVTT(Dataset):
         return self.itos
 
 def collate_fn(batch):
-    res2d, i3d, relation, object_, res2d_mask, i3d_mask, numberic, mask, seq = zip(*batch)
+    res2d, i3d, relation, object_, res2d_mask, i3d_mask, numberic, mask, seq, video_id = zip(*batch)
     
     res2d = np.stack(res2d, axis=0)
     i3d = np.stack(i3d, axis=0)
@@ -238,6 +239,7 @@ def collate_fn(batch):
     numberic = np.stack(numberic, axis=0)
     mask = np.stack(mask, axis=0)
     seq = [s for s in seq]
+    video_id = [v for v in video_id]
 
     res2d = torch.from_numpy(res2d)
     i3d = torch.from_numpy(i3d)
@@ -248,4 +250,4 @@ def collate_fn(batch):
     numberic = torch.from_numpy(numberic)
     mask = torch.from_numpy(mask)
 
-    return res2d, i3d, relation, object_, res2d_mask, i3d_mask, numberic, mask, seq
+    return res2d, i3d, relation, object_, res2d_mask, i3d_mask, numberic, mask, seq, video_id

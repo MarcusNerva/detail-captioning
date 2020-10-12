@@ -10,7 +10,7 @@ import numpy as np
 import pickle
 
 from myscripts.coco_caption.pycocoevalcap.cider.cider import Cider
-from mymodels import CaptionModel, CaptionModel_Part, DatasetMSRVTT, collate_fn
+from mymodels import CaptionModel, CaptionModel_Part, DatasetMSRVTT, collate_fn, DatasetMSVD, msvd_collate_fn
 from myscripts.loss import LanguageModelCriterion, RewardCriterion
 from mycfgs.cfgs import get_total_settings
 from mytools import Visualizer
@@ -75,8 +75,9 @@ def train(args):
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
 
-    dataset = DatasetMSRVTT(mode='train', args=args)
-    valid_dataset = DatasetMSRVTT(mode='valid', args=args)
+    dataset = DatasetMSRVTT(mode='train', args=args) if not args.now_msvd else DatasetMSVD(mode='train', args=args)
+    valid_dataset = DatasetMSRVTT(mode='valid', args=args) if not args.now_msvd else DatasetMSVD(mode='valid', args=args)
+    _collate_fn = collate_fn if not args.now_msvd else msvd_collate_fn
     args.pad_idx = dataset.get_pad_idx()
     args.bos_idx = dataset.get_bos_idx()
     args.eos_idx = dataset.get_eos_idx()
@@ -84,7 +85,7 @@ def train(args):
     args.n_vocab = dataset.get_n_vocab()
     itow = dataset.get_itos()
 
-    dataloader = DataLoader(dataset, batch_size, shuffle=True, collate_fn=collate_fn)
+    dataloader = DataLoader(dataset, batch_size, shuffle=True, collate_fn=_collate_fn)
     vis = Visualizer(env='train model')
     model = CaptionModel_Part(args) if part_model else CaptionModel(args)
 
@@ -130,7 +131,7 @@ def train(args):
             sc_signal = True
             save_checkpoint_every = 250
 
-        for i, (res2d, i3d, relation, object_, res2d_mask, i3d_mask, numberic, mask, seq) in enumerate(dataloader):
+        for i, (res2d, i3d, relation, object_, res2d_mask, i3d_mask, numberic, mask, seq, _) in enumerate(dataloader):
 
             res2d = res2d.to(device)
             i3d = i3d.to(device)

@@ -2,6 +2,7 @@
 # coding=utf-8
 import os
 import glob
+import pickle
 import numpy as np
 import itertools
 
@@ -96,6 +97,7 @@ def rearrange(args, vid):
     box_boundings = args.box_boundings
     rearranged_box_boundings = args.rearranged_box_boundings
     lambda_value = args.lambda_value
+    now_msvd = args.now_msvd
 
     if not os.path.exists(relation_features):
         os.makedirs(relation_features)
@@ -103,10 +105,10 @@ def rearrange(args, vid):
         os.makedirs(object_features)
 
     video_id = '%06d' % vid
-    feat_path = os.path.join(msdn_features, video_id + '.npy')
-    relation_feat_path = os.path.join(relation_features, 'video' + str(vid) + '.npy')
-    object_feat_path = os.path.join(object_features, 'video' + str(vid) + '.npy')
-    box_path = os.path.join(box_boundings, 'video' + str(vid) + '.npy')
+    feat_path = os.path.join(msdn_features, video_id + '.npy' if not now_msvd else vid + '.npy')
+    relation_feat_path = os.path.join(relation_features, 'video' + str(vid) + '.npy' if not now_msvd else vid + '.npy')
+    object_feat_path = os.path.join(object_features, 'video' + str(vid) + '.npy' if not now_msvd else vid + '.npy')
+    box_path = os.path.join(box_boundings, 'video' + str(vid) + '.npy' if not now_msvd else vid + '.npy')
     # rearranged_box_path = os.path.join(rearranged_box_boundings, video_id + '.npy')
 
     features = np.load(feat_path)
@@ -164,17 +166,21 @@ def rearrange(args, vid):
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
-    
+
+    parser.add_argument('--now_msvd', action='store_true')
     parser.add_argument('--msdn_features', type=str, default='/home/hanhuaye/PythonProject/opensource/MSDN/MSRVTT_features/features')
     parser.add_argument('--relation_features', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/relation_features')
     parser.add_argument('--object_features', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/object_features')
     parser.add_argument('--box_boundings', type=str, default='/home/hanhuaye/PythonProject/opensource/MSDN/MSRVTT_boxes/boxes')
     parser.add_argument('--rearranged_box_boundings', type=str, default='/home/hanhuaye/PythonProject/opensource/MSDN/MSRVTT_boxes/rearranged_boxes')
+    parser.add_argument('--vid_dict_path', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/mydata/msvd_data/vid_dict.pkl')
     parser.add_argument('--lambda_value', type=float, default=0.5)
     parser.add_argument('--range', type=int, default=10000)
     parser.add_argument('--n_obj', type=int, default=5)
     args = parser.parse_args()
     n_obj = args.n_obj
+    now_msvd = args.now_msvd
+    vid_dict_path = args.vid_dict_path
 
     global _x, _y, _s, _permutations, _mat_mapping, _store, _relation_id
     _store, _relation_id = [], []
@@ -205,7 +211,16 @@ if __name__ == '__main__':
             if i < j: _relation_id.append(cnt)
             cnt += 1
 
-    for i in range(args.range):
-        rearrange(args, i)
+    if not now_msvd:
+        for i in range(args.range):
+            rearrange(args, i)
+    else:
+        with open(vid_dict_path, 'rb') as f:
+            vid_dict = pickle.load(f)
+            video_name_list = vid_dict.keys()
 
-    print("==========================DONE============================")
+            for video_name in video_name_list:
+                rearrange(args, video_name)
+
+
+    print("==========================rearrange_object DONE============================")

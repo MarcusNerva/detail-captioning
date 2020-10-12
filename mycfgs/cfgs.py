@@ -11,6 +11,7 @@ def get_total_settings():
     """
     parser.add_argument('--seed', type=int, default=1)
     parser.add_argument('--drop_prob', type=float, default=0.5)
+    parser.add_argument('--test_situation', type=str, default='test_situation0', help='there is situation 0-3, please choose one')
 
 
     """
@@ -59,6 +60,8 @@ def get_total_settings():
     parser.add_argument('--seq_dict_subpath', type=str, default='seq_dict.pkl')
     parser.add_argument('--numberic_dict_subpath', type=str, default='numberic_dict.pkl')
     parser.add_argument('--vid_dict_subpath', type=str, default='vid_dict.pkl')
+    parser.add_argument('--msvd_checkpoints_dir', type=str, default='/home/hanhuaye/PythonProject/detail-captioning/checkpoints/msvd')
+
 
     """
     =====================DPP Settings=====================

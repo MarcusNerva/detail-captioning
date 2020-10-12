@@ -2,6 +2,7 @@ import os
 import shutil
 import subprocess
 import glob
+import pickle
 from tqdm import tqdm
 import numpy as np
 import torch
@@ -50,38 +51,40 @@ def extract_frames(video_path, dst):
 
 if __name__ == '__main__':
     args = get_total_settings()
-    dst = os.path.join(args.frames_dir, 'cache')
-    videos_dir = args.videos_dir
-    frames_dir = args.frames_dir
+    frames_dir = os.path.join(args.msvd_data_dir, args.frames_subdir)
+    videos_dir = args.msvd_videos_dir
+    res2d_mask_path = os.path.join(args.msvd_data_dir, args.res2d_mask_subpath)
+    vid_dict_path = os.path.join(args.msvd_data_dir, args.vid_dict_subpath)
+    dst = os.path.join(frames_dir, 'cache')
     if os.path.exists(frames_dir):
         shutil.rmtree(frames_dir)
     os.makedirs(frames_dir)
+    with open(vid_dict_path, 'rb') as f:
+        vid_dict = pickle.load(f)
 
     settings = vars(args)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     _mobilenet = mobilenet_v2(pretrained=True)
     mode = 'frame'
 
-    video_list = glob.glob(os.path.join(videos_dir, '*.mp4'))
-    video_list = sorted(video_list, key=lambda video_path: int(video_path.split('/')[-1].split('.')[0][5:]))
+    video_list = glob.glob(os.path.join(videos_dir, '*.avi'))
     res2d_mask = np.zeros((len(video_list), 20), dtype=bool)
 
     for i, (video_path) in enumerate(video_list):
+        video_name = video_path.split('/')[-1].split('.')[0]
+        vid = vid_dict[video_name]
         extract_frames(video_path, dst)
         frames_list = glob.glob(os.path.join(dst, '*.jpg'))
         frames_list = sorted(frames_list)
         dpp = DPPModel(mode, dst, settings, device, _mobilenet)
         Yg = dpp.dpp()
         Yg = sorted(Yg)
-        res2d_mask[i, :len(Yg)] = True
-        print(Yg)
+        res2d_mask[vid, :len(Yg)] = True
 
         for idx in Yg:
             jpg_path = frames_list[idx]
             jpg_name = jpg_path.split('/')[-1]
-            new_jpg_path = os.path.join(frames_dir, '%06d' % i + '_' + jpg_name)
-            print(jpg_path)
-            print(new_jpg_path)
+            new_jpg_path = os.path.join(frames_dir, video_name + '_' + jpg_name)
             shutil.copyfile(jpg_path, new_jpg_path)
 
-    np.save(args.res2d_mask_path, res2d_mask)
+    np.save(res2d_mask_path, res2d_mask)

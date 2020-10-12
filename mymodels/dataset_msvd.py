@@ -113,6 +113,182 @@ def get_vocab_and_seq(args):
     with open(vid_dict_path, 'wb') as f:
         pickle.dump(vid_dict, f)
 
+
+class DatasetMSVD(Dataset):
+    """
+    This dataset class comprises 3 kinds of mode, namely, training, validation, testing.
+
+    1,200 videos for training, 100 for validation and 670 for testing.
+    I split this MSVD dataset in these 3 part according to they rank in csv file.
+
+    Validation mode and testing mode is similar,
+    where the model we valid/test here needs raw captions and visual features.
+    In training mode, the model needs numericalized captions and visual features, however.
+    """
+
+    def __init__(self, mode, args):
+        """
+
+        Args:
+            mode: 'train', 'valid', 'test'.
+            args:  the global settings defined in mycfgs/cfgs.py
+        """
+        super(DatasetMSVD, self).__init__()
+        self.mode = mode
+        self.args = args
+        self.pad_idx = None
+        self.bos_idx = None
+        self.eos_idx = None
+        self.unk_idx = None
+        self.n_vocab = None
+        self.stoi = None
+        self.itos = None
+
+        self.res2d_dir = os.path.join(args.msvd_data_dir, args.res2d_subdir)
+        self.i3d_dir = os.path.join(args.msvd_data_dir, args.i3d_subdir)
+        self.relation_dir = os.path.join(args.msvd_data_dir, args.relation_subdir)
+        self.object_dir = os.path.join(args.msvd_data_dir, args.object_subdir)
+
+        torchtext_path = os.path.join(args.msvd_data_dir, args.torchtext_subpath)
+        seq_dict_path = os.path.join(args.msvd_data_dir, args.seq_dict_subpath)
+        numberic_dict_path = os.path.join(args.msvd_data_dir, args.numberic_dict_subpath)
+        seq_mask_path = os.path.join(args.msvd_data_dir, args.seq_mask_subpath)
+        res2d_mask_path = os.path.join(args.msvd_data_dir, args.res2d_mask_subpath)
+        i3d_mask_path = os.path.join(args.msvd_data_dir, args.i3d_mask_subpath)
+        vid_dict_path = os.path.join(args.msvd_data_dir, args.vid_dict_subpath)
+
+        if not os.path.exists(torchtext_path) or not os.path.exists(seq_dict_path) \
+            or not os.path.exists(numberic_dict_path) or not os.path.exists(seq_mask_path) \
+            or not os.path.exists(vid_dict_path):
+
+            print('extracting words.........')
+            get_vocab_and_seq(args)
+            print('extracting succeed!')
+
+        self.numberic = []
+        self.video_name = []
+        self.word_mask = []
+        self.res2d_feats = {}
+        self.i3d_feats = {}
+        self.relation_feats = {}
+        self.object_feats = {}
+        self.res2d_mask = np.load(res2d_mask_path)
+        self.i3d_mask = np.load(i3d_mask_path)
+        with open(seq_mask_path, 'rb') as f:
+            seq_mask = pickle.load(f)
+        with open(numberic_dict_path, 'rb') as f:
+            numberic_dict = pickle.load(f)
+        with open(torchtext_path, 'rb') as f:
+            text_proc = pickle.load(f)
+        with open(seq_dict_path, 'rb') as f:
+            self.seq_dict = pickle.load(f)
+        with open(vid_dict_path, 'rb') as f:
+            self.vid_dict = pickle.load(f)
+        self.video_name_list = self._define_video_name_list()
+
+        for video_name in self.video_name_list:
+            res2d_path = os.path.join(self.res2d_dir, video_name + '.npy')
+            i3d_path = os.path.join(self.i3d_dir, video_name + '.npy')
+            relation_path = os.path.join(self.relation_dir, video_name + '.npy')
+            object_path = os.path.join(self.object_dir, video_name + '.npy')
+
+            self.res2d_feats[video_name] = np.load(res2d_path)
+            self.i3d_feats[video_name] = np.load(i3d_path)
+            self.relation_feats[video_name] = np.load(relation_path)
+            self.object_feats[video_name] = np.load(object_path)
+
+            for number_tensor in numberic_dict[video_name]:
+                self.numberic.append(number_tensor)
+                self.video_name.append(video_name)
+            for mask in seq_mask[video_name]:
+                self.word_mask.append(mask)
+
+        pad = args.pad
+        bos = args.bos
+        eos = args.eos
+        unk = args.unk
+        self.pad_idx = text_proc.vocab.stoi[pad]
+        self.bos_idx = text_proc.vocab.stoi[bos]
+        self.eos_idx = text_proc.vocab.stoi[eos]
+        self.unk_idx = text_proc.vocab.stoi[unk]
+        self.n_vocab = len(text_proc.vocab.stoi)
+        self.stoi = text_proc.vocab.stoi
+        self.itos = text_proc.vocab.itos
+
+    def __getitem__(self, idx):
+        video_name = self.video_name_list[idx]
+        numb_vid = self.vid_dict[video_name]
+        res2d_feat = self.res2d_feats[video_name]
+        i3d_feat = self.i3d_feats[video_name]
+        relation_feat = self.relation_feats[video_name]
+        object_feat = self.object_feats[video_name]
+
+        return res2d_feat, \
+                i3d_feat, \
+                relation_feat, \
+                object_feat, \
+                self.res2d_mask[numb_vid], \
+                self.i3d_mask[numb_vid], \
+                self.numberic[idx], \
+                self.word_mask[idx], \
+                self.seq_dict[video_name], \
+                video_name
+
+    def get_pad_idx(self):
+        return self.pad_idx
+
+    def get_bos_idx(self):
+        return self.bos_idx
+
+    def get_eos_idx(self):
+        return self.eos_idx
+
+    def get_unk_idx(self):
+        return self.unk_idx
+
+    def get_n_vocab(self):
+        return self.n_vocab
+
+    def __len__(self):
+        return 20 * len(self.data_range)
+
+    def _define_video_name_list(self):
+        if self.mode not in ['train', 'valid', 'test']:
+            raise NotImplementedError
+
+        video_name_list = list(self.vid_dict.keys())
+        if self.mode == 'train':
+            return video_name_list[:1200]
+        if self.mode == 'valid':
+            return video_name_list[1200:1300]
+        return video_name_list[1300:]
+
+
+def msvd_collate_fn(batch):
+    res2d, i3d, relation, object_, res2d_mask, i3d_mask, numberic, mask, seq, video_name = zip(*batch)
+
+    res2d = np.stack(res2d, axis=0)
+    i3d = np.stack(i3d, axis=0)
+    relation = np.stack(relation, axis=0)
+    object_ = np.stack(object_, axis=0)
+    res2d_mask = np.stack(res2d_mask, axis=0)
+    i3d_mask = np.stack(i3d_mask, axis=0)
+    numberic = np.stack(numberic, axis=0)
+    mask = np.stack(mask, axis=0)
+    seq = [s for s in seq]
+    video_name = [v for v in video_name]
+
+    res2d = torch.from_numpy(res2d)
+    i3d = torch.from_numpy(i3d)
+    relation = torch.from_numpy(relation)
+    object_ = torch.from_numpy(object_)
+    res2d_mask = torch.from_numpy(res2d_mask).bool()
+    i3d_mask = torch.from_numpy(i3d_mask).bool()
+    numberic = torch.from_numpy(numberic)
+    mask = torch.from_numpy(mask)
+
+    return res2d, i3d, relation, object_, res2d_mask, i3d_mask, numberic, mask, seq, video_name
+
 if __name__ == '__main__':
     args = get_total_settings()
     get_vocab_and_seq(args)
