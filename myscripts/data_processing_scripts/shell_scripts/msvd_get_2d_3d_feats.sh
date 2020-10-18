@@ -56,6 +56,21 @@ python /home/hanhuaye/PythonProject/detail-captioning/myscripts/data_processing_
 echo "===============extracting scene feats is finished! Now time is {$(date "+%Y-%m-%d %H:%M:%S")}==============="
 
 conda activate py27
+
+MSVD_features_dir="/home/hanhuaye/PythonProject/opensource/MSDN/MSVD_features/"
+MSVD_boxes_dir="/home/hanhuaye/PythonProject/opensource/MSDN/MSVD_boxes"
+if [ -d ${MSVD_features_dir} ];then
+    echo "####### Clear up MSVD_features_dir #######"
+    rm -rf ${MSVD_features_dir}"/"
+    mkdir -p ${MSVD_features_dir}
+fi
+
+if [ -d ${MSVD_boxes_dir} ];then
+    echo "####### Clear up MSVD_boxes_dir #######"
+    rm -rf ${MSVD_boxes_dir}"/"
+    mkdir -p ${MSVD_boxes_dir}
+fi
+
 python /home/hanhuaye/PythonProject/opensource/MSDN/train_hdn.py \
  --resume_training --disable_language_model --rnn_type LSTM_normal \
  --dataset_option=normal  --MPS_iter=1 \

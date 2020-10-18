@@ -105,7 +105,7 @@ def rearrange(args, vid):
         os.makedirs(object_features)
 
     video_id = '%06d' % vid
-    feat_path = os.path.join(msdn_features, video_id + '.npy' if not now_msvd else vid + '.npy')
+    feat_path = os.path.join(msdn_features, 'video' + str(vid) + '.npy' if not now_msvd else vid + '.npy')
     relation_feat_path = os.path.join(relation_features, 'video' + str(vid) + '.npy' if not now_msvd else vid + '.npy')
     object_feat_path = os.path.join(object_features, 'video' + str(vid) + '.npy' if not now_msvd else vid + '.npy')
     box_path = os.path.join(box_boundings, 'video' + str(vid) + '.npy' if not now_msvd else vid + '.npy')

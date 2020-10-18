@@ -47,6 +47,20 @@ echo "===============extracting frames is finished! Now time is {$(date "+%Y-%m-
 python /home/hanhuaye/PythonProject/detail-captioning/myscripts/data_processing_scripts/extract_scene_feats.py || exit 1
 echo "===============extracting scene feats is finished! Now time is {$(date "+%Y-%m-%d %H:%M:%S")}==============="
 
+MSRVTT_features_dir="/home/hanhuaye/PythonProject/opensource/MSDN/MSRVTT_features/"
+MSRVTT_boxes_dir="/home/hanhuaye/PythonProject/opensource/MSDN/MSRVTT_boxes"
+if [ -d ${MSRVTT_features_dir} ];then
+    echo "####### Clear up MSRVTT_features_dir #######"
+    rm -rf ${MSRVTT_features_dir}"/"
+    mkdir -p ${MSRVTT_features_dir}
+fi
+
+if [ -d ${MSRVTT_boxes_dir} ];then
+    echo "####### Clear up MSRVTT_boxes_dir #######"
+    rm -rf ${MSRVTT_boxes_dir}"/"
+    mkdir -p ${MSRVTT_boxes_dir}
+fi
+
 conda activate py27
 python /home/hanhuaye/PythonProject/opensource/MSDN/train_hdn.py \
  --resume_training --disable_language_model --rnn_type LSTM_normal \
