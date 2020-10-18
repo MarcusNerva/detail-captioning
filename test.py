@@ -5,7 +5,7 @@ import os
 from mymodels import CaptionModel, CaptionModel_Part, DatasetMSRVTT, collate_fn, DatasetMSVD, msvd_collate_fn
 from mycfgs.cfgs import get_total_settings
 from myscripts.eval import eval
-
+from mytools import email_sending
 
 if __name__ == '__main__':
     args = get_total_settings()
@@ -31,3 +31,7 @@ if __name__ == '__main__':
 
     language_state = eval(args, model, test_dataset, device, _collate_fn, test_situation)
     print(language_state)
+
+    dataset_name = 'MSVD' if args.now_msvd else 'MSRVTT'
+    mode = 'test'
+    email_sending(mode=mode, dataset_name=dataset_name)

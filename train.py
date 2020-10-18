@@ -15,6 +15,7 @@ from myscripts.loss import LanguageModelCriterion, RewardCriterion
 from mycfgs.cfgs import get_total_settings
 from mytools import Visualizer
 from myscripts.eval import eval, decode_idx
+from mytools import email_sending
 
 def get_self_critical_reward(args, itow, model, res2ds, i3ds, relations, objects, res_mask, i3d_mask, probability_sample, ground_truths):
     batch_size = res2ds.shape[0]
@@ -189,7 +190,11 @@ def train(args):
 
         epoch += 1
     
-    print("==================Training End==================")  
+    print("==================Training End==================")
+
+    dataset_name = 'MSVD' if args.now_msvd else 'MSRVTT'
+    mode = 'train'
+    email_sending(mode=mode, dataset_name=dataset_name)
 
 
 if __name__ == '__main__':

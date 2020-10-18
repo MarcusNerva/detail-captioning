@@ -129,4 +129,5 @@ nohup cp -r ${origin_i3d_features} ${datastore_i3d_features} > log/cp_i3d_featur
 nohup cp ${origin_res2d_mask} ${datastore_res2d_mask} > log/cp_res2d_mask.log 2>&1 &
 nohup cp ${origin_i3d_mask} ${datastore_i3d_mask} > log/cp_i3d_mask.log 2>&1 &
 
-
+echo "Greetings, Henry! I am glad to inform you that data of MSVD Dataset extraction is finished, and now is copying data to data_store!" \
+    | mail -s "MSVD Data Extraction Finished!" hadrianus_1@163.com
