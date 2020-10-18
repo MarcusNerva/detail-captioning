@@ -7,6 +7,7 @@ from collections import defaultdict
 sys.path.append('../../')
 sys.path.append('../../../')
 from mycfgs import get_total_settings
+import gc
 
 if __name__ == '__main__':
     args = get_total_settings()
@@ -44,3 +45,5 @@ if __name__ == '__main__':
 
         res2d_feat[:temp_feats.shape[0]] = temp_feats
         np.save(save_path, res2d_feat)
+        del res2d_feat
+        gc.collect()
