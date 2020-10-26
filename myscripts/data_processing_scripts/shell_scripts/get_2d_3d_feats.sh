@@ -47,7 +47,7 @@ echo "===============extracting frames is finished! Now time is {$(date "+%Y-%m-
 python /home/hanhuaye/PythonProject/detail-captioning/myscripts/data_processing_scripts/extract_scene_feats.py || exit 1
 echo "===============extracting scene feats is finished! Now time is {$(date "+%Y-%m-%d %H:%M:%S")}==============="
 
-MSRVTT_features_dir="/home/hanhuaye/PythonProject/opensource/MSDN/MSRVTT_features/"
+MSRVTT_features_dir="/home/hanhuaye/PythonProject/opensource/MSDN/MSRVTT_features"
 MSRVTT_boxes_dir="/home/hanhuaye/PythonProject/opensource/MSDN/MSRVTT_boxes"
 if [ -d ${MSRVTT_features_dir} ];then
     echo "####### Clear up MSRVTT_features_dir #######"
