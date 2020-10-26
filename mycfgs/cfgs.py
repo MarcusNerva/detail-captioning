@@ -66,7 +66,7 @@ def get_total_settings():
     """
     =====================DPP Settings=====================
     """
-    parser.add_argument('--n_pick', type=int, default=20)
+    parser.add_argument('--n_pick', type=int, default=10)
     # parser.add_argument('--eps', type=float, default=0.01)
     parser.add_argument('--i3d_eps', type=float, default=0)
     parser.add_argument('--frames_eps', type=float, default=0)
@@ -80,7 +80,7 @@ def get_total_settings():
     parser.add_argument('--relation_size', type=int, default=1024)
     parser.add_argument('--object_size', type=int, default=2048)
     parser.add_argument('--rnn_size', type=int, default=512)
-    parser.add_argument('--length', type=int, default=20)
+    parser.add_argument('--length', type=int, default=10)
 
 
     """

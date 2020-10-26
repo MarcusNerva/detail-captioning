@@ -64,7 +64,7 @@ if __name__ == '__main__':
 
     video_list = glob.glob(os.path.join(videos_dir, '*.mp4'))
     video_list = sorted(video_list, key=lambda video_path: int(video_path.split('/')[-1].split('.')[0][5:]))
-    res2d_mask = np.zeros((len(video_list), 20), dtype=bool)
+    res2d_mask = np.zeros((len(video_list), args.length), dtype=bool)
 
     for i, (video_path) in enumerate(video_list):
         extract_frames(video_path, dst)

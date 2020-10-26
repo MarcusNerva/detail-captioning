@@ -40,7 +40,7 @@ if __name__ == '__main__':
 
     for video_name in video_name_list:
         save_path = os.path.join(res2d_dir, video_name + '.npy')
-        res2d_feat = np.zeros((20, res2d_size))
+        res2d_feat = np.zeros((args.length, res2d_size))
         temp_feats = np.stack(feats_dict[video_name], axis=0)
 
         res2d_feat[:temp_feats.shape[0]] = temp_feats

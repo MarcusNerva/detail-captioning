@@ -68,7 +68,7 @@ if __name__ == '__main__':
     mode = 'frame'
 
     video_list = glob.glob(os.path.join(videos_dir, '*.avi'))
-    res2d_mask = np.zeros((len(video_list), 20), dtype=bool)
+    res2d_mask = np.zeros((len(video_list), args.length), dtype=bool)
 
     for i, (video_path) in enumerate(video_list):
         video_name = video_path.split('/')[-1].split('.')[0]

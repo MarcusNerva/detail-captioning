@@ -140,6 +140,10 @@ class DatasetMSRVTT(Dataset):
         self.word_mask = []
         self.res2d_mask = np.load(res2d_mask_path)
         self.i3d_mask = np.load(i3d_mask_path)
+        self.res2d_dict = {}
+        self.i3d_dict = {}
+        self.object_dict = {}
+        self.relation_dict = {}
         with open(seq_mask_path, 'rb') as f:
             seq_mask = pickle.load(f)
         with open(numberic_dict_path, 'rb') as f:
@@ -174,10 +178,16 @@ class DatasetMSRVTT(Dataset):
         vid = self.video_id[idx]
         numb_vid = int(vid[5:])
 
-        res2d = np.load(os.path.join(self.res2d_dir, vid + '.npy'))
-        i3d = np.load(os.path.join(self.i3d_dir, vid + '.npy'))
-        relation = np.load(os.path.join(self.relation_dir, vid + '.npy'))
-        object_ = np.load(os.path.join(self.object_dir, vid + '.npy'))
+        if vid not in self.res2d_dict.keys():
+            self.res2d_dict[vid] = np.load(os.path.join(self.res2d_dir, vid + '.npy'))
+            self.i3d_dict[vid] = np.load(os.path.join(self.i3d_dir, vid + '.npy'))
+            self.relation_dict[vid] = np.load(os.path.join(self.relation_dir, vid + '.npy'))
+            self.object_dict[vid] = np.load(os.path.join(self.object_dir, vid + '.npy'))
+
+        res2d = self.res2d_dict[vid]
+        i3d = self.i3d_dict[vid]
+        relation = self.relation_dict[vid]
+        object_ = self.object_dict[vid]
 
         return res2d, \
                 i3d, \

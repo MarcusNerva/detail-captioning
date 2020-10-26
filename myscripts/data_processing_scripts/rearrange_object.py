@@ -119,7 +119,7 @@ def rearrange(args, vid):
     boxes = boxes[..., 1:]
     boxes_new = np.zeros(boxes.shape)
     print(boxes_new.shape)
-    assert boxes_new.shape == (20, 5, 4), '========box size is wrong!========'
+    assert boxes_new.shape == (args.length, 5, 4), '========box size is wrong!========'
 
     length = boxes.shape[0]
     n_obj = boxes.shape[1]
@@ -155,7 +155,7 @@ def rearrange(args, vid):
         relation[i, ...] = features_new[i, _relation_id, ...]
         objects[i, ...] = np.stack([features_new[i, pair, ...].reshape(-1) for pair in _store], axis=0)
         
-    assert relation.shape == (20, 10, 1024) and objects.shape == (20, 10, 2048), 'rearrange failed!'
+    assert relation.shape == (args.length, 10, 1024) and objects.shape == (args.length, 10, 2048), 'rearrange failed!'
     print('done rearrange, relation.shape == {rela} objects.shape == {obj}'.format(rela=relation.shape, obj=objects.shape))
     # np.save(rearranged_feat_path, features_new)
     np.save(relation_feat_path, relation)
@@ -177,6 +177,7 @@ if __name__ == '__main__':
     parser.add_argument('--lambda_value', type=float, default=0.5)
     parser.add_argument('--range', type=int, default=10000)
     parser.add_argument('--n_obj', type=int, default=5)
+    parser.add_argument('--length', type=int, default=10)
     args = parser.parse_args()
     n_obj = args.n_obj
     now_msvd = args.now_msvd
